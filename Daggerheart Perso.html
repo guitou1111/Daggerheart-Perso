@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche de Personnage - Daggerheart</title>
+    <style>
+        /* THÈMES */
+        :root {
+            --primary-gold: #d4af37; --bg-dark: #1a1a1a; --bg-panel: #2a2a2a;
+            --bg-input: #333; --text-light: #e0e0e0; --border-radius: 6px; --border-color: #555;
+        }
+        body.theme-parchment {
+            --primary-gold: #8b6914; --bg-dark: #f0e6d2; --bg-panel: #e3d5b8;
+            --bg-input: #fffaf0; --text-light: #2c2216; --border-color: #c4b494;
+        }
+        body.theme-night {
+            --primary-gold: #93c5fd; --bg-dark: #0f172a; --bg-panel: #1e293b;
+            --bg-input: #334155; --text-light: #f8fafc; --border-color: #475569;
+        }
+		body.theme-Barde {
+            --primary-gold: #ff85c1; --bg-dark: #1f1a1d; --bg-panel: #2d2529;
+            --bg-input: #3d3338; --text-light: #fce4ec; --border-color: #7b5a6a;
+        }
+        body.theme-Druide {
+            --primary-gold: #76c893; --bg-dark: #1a261d; --bg-panel: #253328;
+            --bg-input: #324434; --text-light: #e0f2e5; --border-color: #526f58;
+        }
+        body.theme-Gardien {
+            --primary-gold: #5fa8d3; --bg-dark: #1a2228; --bg-panel: #253038;
+            --bg-input: #32404b; --text-light: #e0f0f7; --border-color: #557082;
+        }
+        body.theme-Guerrier {
+            --primary-gold: #e63946; --bg-dark: #241a1a; --bg-panel: #332424;
+            --bg-input: #4a3333; --text-light: #f7e1e1; --border-color: #825555;
+        }
+        body.theme-Magicien {
+            --primary-gold: #b392ac; --bg-dark: #1d1a24; --bg-panel: #2b2533;
+            --bg-input: #3a314a; --text-light: #ece7f2; --border-color: #685775;
+        }
+        body.theme-Rodeur {
+            --primary-gold: #d4a373; --bg-dark: #221d1a; --bg-panel: #302b26;
+            --bg-input: #453d35; --text-light: #f5ede4; --border-color: #7a6a58;
+        }
+        body.theme-Roublard {
+            --primary-gold: #adb5bd; --bg-dark: #161a1d; --bg-panel: #212529;
+            --bg-input: #343a40; --text-light: #e9ecef; --border-color: #495057;
+        }
+        body.theme-Seraphin {
+            --primary-gold: #f4d35e; --bg-dark: #211f1a; --bg-panel: #2e2b24;
+            --bg-input: #423d32; --text-light: #fffcf2; --border-color: #736b51;
+        }
+        body.theme-Sorcier {
+            --primary-gold: #48cae4; --bg-dark: #1a2226; --bg-panel: #253036;
+            --bg-input: #32444d; --text-light: #e0f7fa; --border-color: #52757a;
+        }
+		
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-dark); color: var(--text-light); margin: 0; padding: 10px; font-size: 0.9em; transition: 0.3s; }
+        
+        h1 { margin: 0 0 10px 0; font-size: 1.5em; color: var(--primary-gold); }
+        h2 { margin: 10px 0 5px 0; font-size: 1.2em; color: var(--primary-gold); border-bottom: 1px solid var(--primary-gold); }
+        h3 { margin: 5px 0; font-size: 1.1em; color: var(--primary-gold); }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--primary-gold); padding-bottom: 5px; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+        
+        .section-panel { background-color: var(--bg-panel); padding: 10px 15px; border-radius: var(--border-radius); margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+        /* Grilles structurées */
+        .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .grid-6-strict { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+        .grid-3-strict { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+        .grid-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+
+        label { display: block; font-weight: bold; color: var(--primary-gold); font-size: 0.85em; }
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%; padding: 5px; background-color: var(--bg-input); color: var(--text-light);
+            border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; font-family: inherit; font-size: 0.95em;
+        }
+        textarea { resize: vertical; min-height: 40px; margin-top: 2px; }
+
+        button, .btn-file {
+            background-color: var(--primary-gold); color: #000; border: none; padding: 6px 12px;
+            font-size: 0.95em; font-weight: bold; border-radius: 4px; cursor: pointer; text-align: center;
+        }
+        button:hover, .btn-file:hover { filter: brightness(1.1); }
+        .btn-file { background-color: var(--bg-input); color: var(--text-light); border: 1px solid var(--border-color); }
+
+        /* Style Identité Agrandie */
+        .identity-large { font-size: 1.5em !important; font-weight: bold; padding: 6px !important; margin-top: 2px; }
+        .label-large { font-size: 1.05em !important; }
+
+        /* Alignement horizontal pour les caractéristiques et les jauges */
+        .stat-box { 
+            display: flex; align-items: center; justify-content: space-between; 
+            background-color: var(--bg-input); padding: 6px 10px; 
+            border-radius: var(--border-radius); border: 1px solid var(--border-color); gap: 8px;
+        }
+        .stat-box label { margin: 0; white-space: nowrap; }
+        .stat-box input[type="number"] { width: 50px; text-align: center; font-size: 1.1em; font-weight: bold; padding: 3px; margin: 0; }
+        .stat-box input[type="text"] { width: 100px; text-align: center; font-size: 1em; font-weight: bold; padding: 3px; margin: 0; }
+        
+        .gauge-compact { display: flex; align-items: center; gap: 3px; margin: 0; }
+        .gauge-compact input[type="number"] { width: 45px; padding: 3px; }
+        .gauge-separator { font-size: 1.1em; font-weight: bold; color: var(--primary-gold); padding: 0 2px; }
+
+        /* Cartes Image */
+        .card { background: linear-gradient(145deg, var(--bg-panel), var(--bg-dark)); border: 1px solid var(--primary-gold); border-radius: 8px; padding: 10px; text-align: center; display: flex; flex-direction: column; }
+        .card-title { font-weight: bold; font-size: 1em; background: transparent; border: none; border-bottom: 1px dashed var(--primary-gold); color: var(--primary-gold); text-align: center; margin-bottom: 8px; padding: 2px; }
+        .card-img-preview { width: 100%; aspect-ratio: 5 / 7; object-fit: contain; background-color: #111; border-radius: 6px; border: 1px solid var(--border-color); display: none; margin-bottom: 5px; }
+        .file-input { font-size: 0.75em; color: var(--text-light); width: 100%; margin-top: auto; }
+
+        .portrait-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-gold); display: none; margin: 0 auto 5px auto; }
+
+        @media (max-width: 850px) {
+            .grid-cards, .grid-3-strict { grid-template-columns: repeat(2, 1fr); }
+            .grid-6-strict { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 500px) {
+            .grid-cards, .grid-3-strict, .grid-6-strict { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div class="header-flex">
+        <h1>⚔️ Daggerheart</h1>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <select id="themeSelect" onchange="changeTheme()" style="width: auto;">
+                <option value="theme-dark">Thème : Sombre</option>
+                <option value="theme-parchment">Thème : Parchemin</option>
+                <option value="theme-night">Thème : Nuit</option>
+				<option value="theme-Barde">Barde</option>
+				<option value="theme-Druide">Druide</option>
+				<option value="theme-Gardien">Gardien</option>
+				<option value="theme-Guerrier" selected>Guerrier</option>
+				<option value="theme-Magicien">Magicien</option>
+				<option value="theme-Rodeur">Rôdeur</option>
+				<option value="theme-Roublard">Roublard</option>
+				<option value="theme-Seraphin">Séraphin</option>
+				<option value="theme-Sorcier">Sorcier</option>
+            </select>
+            <button onclick="exportCharacter()">⬇️ Exporter</button>
+            <label for="importFile" class="btn-file" style="margin: 0;">⬆️ Importer</label>
+            <input type="file" id="importFile" accept=".json" onchange="importCharacter(event)" style="display: none;">
+        </div>
+    </div>
+
+    <!-- PORTRAIT ET IDENTITÉ GRAND FORMAT -->
+    <div class="grid-auto">
+        <div class="section-panel" style="text-align: center; display: flex; flex-direction: column; justify-content: center; max-width: 150px; margin: 0 auto 10px auto;">
+            <img id="imgPortrait" class="portrait-img" src="">
+            <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgPortrait')">
+        </div>
+
+        <div class="section-panel" style="grid-column: span 2; display: flex; align-items: center;">
+            <div class="grid-auto" style="width: 100%; gap: 15px;">
+                <div><label class="label-large">Nom du Personnage</label><input type="text" id="charName" class="identity-large"></div>
+                <div><label class="label-large">Pronoms</label><input type="text" id="charPronouns" class="identity-large"></div>
+                <div><label class="label-large">Niveau</label><input type="number" id="charLevel" value="1" class="identity-large"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARACTÉRISTIQUES (Étiquettes à gauche, 6 en ligne) -->
+    <div class="section-panel">
+        <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Caractéristiques</h3>
+        <div class="grid-6-strict">
+            <div class="stat-box"><label>Agilité</label><input type="number" id="statAgi" value="0"></div>
+            <div class="stat-box"><label>Finesse</label><input type="number" id="statFin" value="0"></div>
+            <div class="stat-box"><label>Instinct</label><input type="number" id="statIns" value="0"></div>
+            <div class="stat-box"><label>Présence</label><input type="number" id="statPre" value="0"></div>
+            <div class="stat-box"><label>Savoir</label><input type="number" id="statKno" value="0"></div>
+            <div class="stat-box"><label>Force</label><input type="number" id="statStr" value="0"></div>
+        </div>
+    </div>
+
+    <!-- JAUGES & DÉFENSE (Étiquettes à gauche, 2 lignes de 3) -->
+    <div class="section-panel">
+        <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Jauges & Défense</h3>
+        <!-- Ligne 1 : HP, Stress, Espoir -->
+        <div class="grid-3-strict">
+            <div class="stat-box">
+                <label>❤️ HP</label>
+                <div class="gauge-compact"><input type="number" id="valHPCurr" value="6"><span class="gauge-separator">/</span><input type="number" id="valHPMax" value="6"></div>
+            </div>
+            <div class="stat-box">
+                <label>🧠 Stress</label>
+                <div class="gauge-compact"><input type="number" id="valStressCurr" value="0"><span class="gauge-separator">/</span><input type="number" id="valStressMax" value="5"></div>
+            </div>
+            <div class="stat-box">
+                <label>✨ Espoir</label>
+                <div class="gauge-compact"><input type="number" id="valHopeCurr" value="2"><span class="gauge-separator">/</span><input type="number" id="valHopeMax" value="5"></div>
+            </div>
+        </div>
+        <!-- Ligne 2 : Esquive, Armure, Seuils -->
+        <div class="grid-3-strict" style="margin-bottom: 0;">
+            <div class="stat-box">
+                <label>🏃 Esquive</label>
+                <input type="number" id="valEvasion" value="8">
+            </div>
+            <div class="stat-box">
+                <label>🛡️ Armure</label>
+                <div class="gauge-compact"><input type="number" id="valArmorCurr" value="0"><span class="gauge-separator">/</span><input type="number" id="valArmorMax" value="3"></div>
+            </div>
+            <div class="stat-box">
+                <label>⚖️ Seuils</label>
+                <input type="text" id="valThresholds" placeholder="5/10/15">
+            </div>
+        </div>
+    </div>
+
+    <!-- EXPÉRIENCES -->
+    <div class="section-panel">
+        <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Expériences</h3>
+        <div class="grid-3-strict" style="margin-bottom: 0;">
+            <div class="stat-box"><input type="text" id="exp1Name" placeholder="Expérience 1" style="text-align:left; width:100%;"><input type="number" id="exp1Val" value="2"></div>
+            <div class="stat-box"><input type="text" id="exp2Name" placeholder="Expérience 2" style="text-align:left; width:100%;"><input type="number" id="exp2Val" value="1"></div>
+            <div class="stat-box"><input type="text" id="exp3Name" placeholder="Expérience 3" style="text-align:left; width:100%;"><input type="number" id="exp3Val" value="0"></div>
+        </div>
+    </div>
+
+    <!-- CARTES DE FONDATION (3 par ligne de large) -->
+    <div class="section-panel">
+        <h3>Fondations</h3>
+        <div class="grid-cards">
+            <div class="card"><input type="text" id="classCardName" class="card-title" placeholder="Classe"><img id="imgClass" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgClass')"></div>
+            <div class="card"><input type="text" id="ancestryCardName" class="card-title" placeholder="Ascendance"><img id="imgAncestry" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgAncestry')"></div>
+            <div class="card"><input type="text" id="communityCardName" class="card-title" placeholder="Communauté"><img id="imgCommunity" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgCommunity')"></div>
+            <div class="card"><input type="text" id="originCardName" class="card-title" placeholder="Origine"><img id="imgOrigin" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgOrigin')"></div>
+        </div>
+    </div>
+
+    <!-- CARTES D'ÉQUIPEMENT (3 par ligne de large) -->
+    <div class="section-panel">
+        <h3>Équipement Actif</h3>
+        <div class="grid-cards">
+            <div class="card"><input type="text" id="wpn1Name" class="card-title" placeholder="Arme Principale"><img id="imgWpn1" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgWpn1')"></div>
+            <div class="card"><input type="text" id="wpn2Name" class="card-title" placeholder="Arme Secondaire"><img id="imgWpn2" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgWpn2')"></div>
+            <div class="card"><input type="text" id="armorName" class="card-title" placeholder="Armure"><img id="imgArmor" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgArmor')"></div>
+        </div>
+    </div>
+
+    <!-- CARTES DE DOMAINE (3 par ligne de large) -->
+    <div class="section-panel">
+        <h3>Cartes de Domaine</h3>
+        <div class="grid-cards">
+            <div class="card"><input type="text" id="card1Name" class="card-title" placeholder="Capacité 1"><img id="imgCard1" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgCard1')"></div>
+            <div class="card"><input type="text" id="card2Name" class="card-title" placeholder="Capacité 2"><img id="imgCard2" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgCard2')"></div>
+            <div class="card"><input type="text" id="card3Name" class="card-title" placeholder="Capacité 3"><img id="imgCard3" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgCard3')"></div>
+            <div class="card"><input type="text" id="card4Name" class="card-title" placeholder="Capacité 4"><img id="imgCard4" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgCard4')"></div>
+            <div class="card"><input type="text" id="card5Name" class="card-title" placeholder="Capacité 5"><img id="imgCard5" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgCard5')"></div>
+        </div>
+    </div>
+
+    <!-- INVENTAIRE -->
+    <div class="section-panel">
+        <h3 style="text-align: left; margin-top: 0;">🎒 Sac & Notes</h3>
+        <div class="grid-auto">
+            <div><label>Inventaire & Objets</label><textarea id="invSlots" rows="4"></textarea></div>
+            <div><label>Or & Richesses</label><input type="text" id="invGold"><label style="margin-top:5px;">Notes de campagne</label><textarea id="adventureNotes" rows="2" placeholder="Notes de campagne..."></textarea></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- GESTION DU THÈME ---
+    function changeTheme() {
+        document.body.className = document.getElementById('themeSelect').value;
+    }
+
+    // --- GESTION DES IMAGES EN BASE64 ---
+    function loadImage(event, imgId) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgTag = document.getElementById(imgId);
+                imgTag.src = e.target.result;
+                imgTag.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // --- SAUVEGARDE ET CHARGEMENT PAR FICHIER JSON ---
+    const textFields = [
+        "themeSelect", "charName", "charPronouns", "charLevel",
+        "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr",
+        "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds",
+        "exp1Name", "exp1Val", "exp2Name", "exp2Val", "exp3Name", "exp3Val",
+        "classCardName", "ancestryCardName", "communityCardName", "originCardName",
+        "wpn1Name", "wpn2Name", "armorName",
+        "card1Name", "card2Name", "card3Name", "card4Name", "card5Name",
+        "invSlots", "invGold", "adventureNotes"
+    ];
+
+    const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
+
+    function exportCharacter() {
+        const data = {};
+        textFields.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.value; });
+        imageIds.forEach(id => { const img = document.getElementById(id); if(img && img.src && img.src.startsWith('data:image')) data[id] = img.src; });
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        let charName = document.getElementById("charName").value.trim() || "Inconnu";
+        downloadAnchorNode.setAttribute("download", "Daggerheart_" + charName + ".json");
+        document.body.appendChild(downloadAnchorNode); 
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+
+    function importCharacter(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                textFields.forEach(id => { if(data[id] !== undefined && document.getElementById(id)) document.getElementById(id).value = data[id]; });
+                changeTheme();
+
+                imageIds.forEach(id => {
+                    const imgTag = document.getElementById(id);
+                    if(data[id] && imgTag) { imgTag.src = data[id]; imgTag.style.display = 'block'; } 
+                    else if (imgTag) { imgTag.src = ""; imgTag.style.display = 'none'; }
+                });
+            } catch (err) {
+                alert("Fichier de sauvegarde invalide.");
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = "";
+    }
+
+    window.onload = changeTheme;
+</script>
+
+</body>
+</html>
