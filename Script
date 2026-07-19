@@ -1,0 +1,36 @@
+// Remplacez ces valeurs par les vôtres
+const GITHUB_TOKEN = "VOTRE_PERSONAL_ACCESS_TOKEN"; 
+const REPO_OWNER = "guitou1111";
+const REPO_NAME = "Daggerheart-Perso";
+const FILE_PATH = "Marlowe Bonvent.json";
+
+async function saveToGitHub() {
+    const data = {};
+    textFields.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.value; });
+    
+    // Obtenir le SHA actuel du fichier (nécessaire pour update)
+    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+    const response = await fetch(url, { headers: { 'Authorization': `token ${GITHUB_TOKEN}` } });
+    const json = await response.json();
+    
+    await fetch(url, {
+        method: 'PUT',
+        headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            message: "Mise à jour fiche personnage",
+            content: btoa(JSON.stringify(data)),
+            sha: json.sha
+        })
+    });
+    alert("Sauvegardé sur GitHub !");
+}
+
+async function loadFromGitHub() {
+    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+    const response = await fetch(url, { headers: { 'Authorization': `token ${GITHUB_TOKEN}` } });
+    const json = await response.json();
+    const data = JSON.parse(atob(json.content));
+    
+    textFields.forEach(id => { if(data[id] !== undefined && document.getElementById(id)) document.getElementById(id).value = data[id]; });
+    alert("Chargé depuis GitHub !");
+}
