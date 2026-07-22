@@ -119,7 +119,13 @@
         @media (max-width: 500px) {
             .grid-cards, .grid-3-strict, .grid-6-strict { grid-template-columns: 1fr; }
         }
-    </style>
+   
+		.gauge-compact button {
+			padding: 2px 8px;
+			margin: 0 2px;
+			font-size: 0.8em;
+			cursor: pointer;
+}	</style>
 </head>
 <body>
 
@@ -180,38 +186,72 @@
 
     <!-- JAUGES & DÉFENSE (Étiquettes à gauche, 2 lignes de 3) -->
     <div class="section-panel">
-        <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Jauges & Défense</h3>
-        <!-- Ligne 1 : HP, Stress, Espoir -->
-        <div class="grid-3-strict">
-            <div class="stat-box">
-                <label>❤️ HP</label>
-                <div class="gauge-compact"><input type="number" id="valHPCurr" value="6"><span class="gauge-separator">/</span><input type="number" id="valHPMax" value="6"></div>
-            </div>
-            <div class="stat-box">
-                <label>🧠 Stress</label>
-                <div class="gauge-compact"><input type="number" id="valStressCurr" value="0"><span class="gauge-separator">/</span><input type="number" id="valStressMax" value="5"></div>
-            </div>
-            <div class="stat-box">
-                <label>✨ Espoir</label>
-                <div class="gauge-compact"><input type="number" id="valHopeCurr" value="2"><span class="gauge-separator">/</span><input type="number" id="valHopeMax" value="5"></div>
+    <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Jauges & Défense</h3>
+    
+    <div class="grid-3-strict">
+        <!-- HP -->
+        <div class="stat-box">
+            <label>❤️ HP</label>
+            <div class="gauge-compact">
+                <button onclick="modifyValue('valHPCurr', -1)">-</button>
+                <input type="number" id="valHPCurr" value="6">
+                <button onclick="modifyValue('valHPCurr', 1)">+</button>
+                <span class="gauge-separator">/</span>
+                <input type="number" id="valHPMax" value="6">
             </div>
         </div>
-        <!-- Ligne 2 : Esquive, Armure, Seuils -->
-        <div class="grid-3-strict" style="margin-bottom: 0;">
-            <div class="stat-box">
-                <label>🏃 Esquive</label>
-                <input type="number" id="valEvasion" value="8">
+        <!-- Stress -->
+        <div class="stat-box">
+            <label>🧠 Stress</label>
+            <div class="gauge-compact">
+                <button onclick="modifyValue('valStressCurr', -1)">-</button>
+                <input type="number" id="valStressCurr" value="0">
+                <button onclick="modifyValue('valStressCurr', 1)">+</button>
+                <span class="gauge-separator">/</span>
+                <input type="number" id="valStressMax" value="5">
             </div>
-            <div class="stat-box">
-                <label>🛡️ Armure</label>
-                <div class="gauge-compact"><input type="number" id="valArmorCurr" value="0"><span class="gauge-separator">/</span><input type="number" id="valArmorMax" value="3"></div>
-            </div>
-            <div class="stat-box">
-                <label>⚖️ Seuils</label>
-                <input type="text" id="valThresholds" placeholder="5/10/15">
+        </div>
+        <!-- Espoir -->
+        <div class="stat-box">
+            <label>✨ Espoir</label>
+            <div class="gauge-compact">
+                <button onclick="modifyValue('valHopeCurr', -1)">-</button>
+                <input type="number" id="valHopeCurr" value="2">
+                <button onclick="modifyValue('valHopeCurr', 1)">+</button>
+                <span class="gauge-separator">/</span>
+                <input type="number" id="valHopeMax" value="5">
             </div>
         </div>
     </div>
+
+    <div class="grid-3-strict" style="margin-bottom: 0;">
+        <!-- Esquive -->
+        <div class="stat-box">
+            <label>🏃 Esquive</label>
+            <div>
+                <button onclick="modifyValue('valEvasion', -1)">-</button>
+                <input type="number" id="valEvasion" value="8">
+                <button onclick="modifyValue('valEvasion', 1)">+</button>
+            </div>
+        </div>
+        <!-- Armure -->
+        <div class="stat-box">
+            <label>🛡️ Armure</label>
+            <div class="gauge-compact">
+                <button onclick="modifyValue('valArmorCurr', -1)">-</button>
+                <input type="number" id="valArmorCurr" value="0">
+                <button onclick="modifyValue('valArmorCurr', 1)">+</button>
+                <span class="gauge-separator">/</span>
+                <input type="number" id="valArmorMax" value="3">
+            </div>
+        </div>
+        <!-- Seuils (Note: pas de boutons pour le texte) -->
+        <div class="stat-box">
+            <label>⚖️ Seuils</label>
+            <input type="text" id="valThresholds" placeholder="5/10/15">
+        </div>
+    </div>
+</div>
 
     <!-- EXPÉRIENCES -->
     <div class="section-panel">
@@ -341,6 +381,14 @@
     }
 
     window.onload = changeTheme;
+
+function modifyValue(id, delta) {
+    const input = document.getElementById(id);
+    if (input) {
+        let val = parseInt(input.value) || 0;
+        input.value = val + delta;
+    }
+}
 </script>
 
 </body>
