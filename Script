@@ -2,7 +2,7 @@
 const GITHUB_TOKEN = "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"; 
 const REPO_OWNER = "guitou1111";
 const REPO_NAME = "Daggerheart-Perso";
-const FILE_PATH = "Marlowe Bonvent.json";
+const FILE_PATH = "Marlowe_Bonvent.json";
 
 async function saveToGitHub() {
     const data = {};
