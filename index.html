@@ -344,19 +344,7 @@
     }
 
     window.onload = changeTheme;
-// Remplacez ces valeurs par les vôtres
-const GITHUB_TOKEN = "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"; 
-const REPO_OWNER = "guitou1111";
-const REPO_NAME = "Daggerheart-Perso";
-const FILE_PATH = "Marlowe_Bonvent.json";
-
-async function saveToGitHub() {
-    const data = {};
-    textFields.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.value; });
-    imageIds.forEach(id => { const img = document.getElementById(id); if(img && img.src.startsWith('data:image')) data[id] = img.src; });
-
-    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
-   
+  
 
 </script>
 
