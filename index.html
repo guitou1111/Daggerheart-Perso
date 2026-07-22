@@ -356,38 +356,8 @@ async function saveToGitHub() {
     imageIds.forEach(id => { const img = document.getElementById(id); if(img && img.src.startsWith('data:image')) data[id] = img.src; });
 
     const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
-    
-    // Récupérer le SHA actuel
-    const res = await fetch(url, { headers: { 'Authorization': `token ${GITHUB_TOKEN}` } });
-    const json = await res.json();
-    
-    // Encodage propre pour éviter les erreurs de caractères spéciaux
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-    
-    await fetch(url, {
-        method: 'PUT',
-        headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            message: "Mise à jour fiche",
-            content: content,
-            sha: json.sha
-        })
-    });
-    alert("Sauvegardé sur GitHub !");
-}
+   
 
-async function loadFromGitHub() {
-    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
-    const res = await fetch(url, { headers: { 'Authorization': `token ${GITHUB_TOKEN}` } });
-    const json = await res.json();
-    
-    // Décodage propre
-    const data = JSON.parse(decodeURIComponent(escape(atob(json.content))));
-    
-    textFields.forEach(id => { if(data[id] !== undefined && document.getElementById(id)) document.getElementById(id).value = data[id]; });
-    imageIds.forEach(id => { const img = document.getElementById(id); if(data[id] && img) img.src = data[id]; });
-    alert("Chargé depuis GitHub !");
-}
 </script>
 
 </body>
