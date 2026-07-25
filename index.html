@@ -313,10 +313,6 @@
 	<div class="card card-druid-only" style="justify-content: flex-start;">
 		<!-- Ligne de sélection -->
 		<div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px;">
-			<div style="display: flex; align-items: center; gap: 5px;">
-				<input type="checkbox" id="toggleAnimalForms" onchange="updateAnimalVisibility()">
-				<label for="toggleAnimalForms" style="margin:0; white-space: nowrap;">Afficher config</label>
-			</div>
 			<div style="display: flex; align-items: center; gap: 5px; flex-grow: 1;">
 				<label for="activeAnimalForm" style="margin:0; white-space: nowrap;">Forme Active :</label>
 				<select id="activeAnimalForm" style="flex-grow: 1;" onchange="updateSelectedFormTitle()">
@@ -376,20 +372,24 @@
 </div>
 
 <script>
-    // --- INITIALISATION DES DONNÉES ---
     let formsData = {
         form1: { name: "", img: "" }, form2: { name: "", img: "" },
         form3: { name: "", img: "" }, form4: { name: "", img: "" },
         form5: { name: "", img: "" }, form6: { name: "", img: "" }
     };
 
-    // --- GESTION DU THÈME ---
     function changeTheme() {
         document.body.className = document.getElementById('themeSelect').value;
-        updateAnimalVisibility();
     }
 
-    // --- GESTION DES IMAGES ---
+    // --- CORRECTION DES JAUGES ---
+    function modifyValue(id, delta) {
+        const input = document.getElementById(id);
+        if (input) {
+            input.value = parseInt(input.value || 0) + delta;
+        }
+    }
+
     function loadImage(event, imgId) {
         const file = event.target.files[0];
         if (file) {
@@ -398,71 +398,10 @@
                 const imgTag = document.getElementById(imgId);
                 imgTag.src = e.target.result;
                 imgTag.style.display = 'block';
-                saveCurrentForm(); // Sauvegarde automatiquement lors du changement d'image
+                saveCurrentForm();
             }
             reader.readAsDataURL(file);
         }
-    }
-
-    const textFields = [
-        "themeSelect", "charName", "charPronouns", "charLevel",
-        "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr",
-        "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", 
-        "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds",
-        "exp1Name", "exp1Val", "exp1Desc", "exp2Name", "exp2Val", "exp2Desc", "exp3Name", "exp3Val", "exp3Desc",
-        "classCardName", "ancestryCardName", "communityCardName", "originCardName",
-        "wpn1Name", "wpn2Name", "armorName",
-        "card1Name", "card2Name", "card3Name", "card4Name", "card5Name",
-        "invSlots", "invGold", "adventureNotes",
-        "activeAnimalForm", "toggleAnimalForms"
-    ];
-
-    const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgActiveForm", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
-
-    function exportCharacter() {
-        saveCurrentForm();
-        const data = {};
-        textFields.forEach(id => { 
-            const el = document.getElementById(id); 
-            if(el) data[id] = (el.type === "checkbox") ? el.checked : el.value;
-        });
-        imageIds.forEach(id => { const img = document.getElementById(id); if(img && img.src.startsWith('data:image')) data[id] = img.src; });
-        data.formsData = formsData;
-
-        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = (document.getElementById("charName").value || "Daggerheart_Perso") + ".json";
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-    }
-
-    function importCharacter(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                formsData = data.formsData || formsData;
-                textFields.forEach(id => { 
-                    const el = document.getElementById(id);
-                    if(data[id] !== undefined && el) {
-                        if (el.type === "checkbox") el.checked = (data[id] === true || data[id] === "true");
-                        else el.value = data[id];
-                    }
-                });
-                changeTheme();
-                imageIds.forEach(id => {
-                    const imgTag = document.getElementById(id);
-                    if(data[id] && imgTag) { imgTag.src = data[id]; imgTag.style.display = 'block'; }
-                    else if (imgTag) { imgTag.src = ""; imgTag.style.display = 'none'; }
-                });
-                updateSelectedFormTitle();
-            } catch (err) { alert("Erreur de lecture."); }
-        };
-        reader.readAsText(file);
     }
 
     function saveCurrentForm() {
@@ -489,23 +428,40 @@
         }
     }
 
-    function updateAnimalVisibility() {
-        const mainContainer = document.getElementById('animalFormsContainer');
-        const isDruid = document.getElementById('themeSelect').value === 'theme-Druide';
-        const isChecked = document.getElementById('toggleAnimalForms').checked;
-        
-        // Affiche le bloc de configuration uniquement si Druide + Checkbox cochée
-        // Note: l'affichage réel dépend du choix dans le menu "Forme Active" (voir updateSelectedFormTitle)
-        if (isDruid && isChecked) {
-            updateSelectedFormTitle();
-        } else {
-            document.getElementById('animalFormsContainer').style.display = 'none';
-        }
+    // --- EXPORT / IMPORT ---
+    const textFields = ["themeSelect", "charName", "charPronouns", "charLevel", "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr", "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds", "exp1Name", "exp1Val", "exp1Desc", "exp2Name", "exp2Val", "exp2Desc", "exp3Name", "exp3Val", "exp3Desc", "classCardName", "ancestryCardName", "communityCardName", "originCardName", "wpn1Name", "wpn2Name", "armorName", "card1Name", "card2Name", "card3Name", "card4Name", "card5Name", "invSlots", "invGold", "adventureNotes", "activeAnimalForm"];
+    const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgActiveForm", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
+
+    function exportCharacter() {
+        saveCurrentForm();
+        const data = {};
+        textFields.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.value; });
+        imageIds.forEach(id => { const img = document.getElementById(id); if(img && img.src.startsWith('data:image')) data[id] = img.src; });
+        data.formsData = formsData;
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = (document.getElementById("charName").value || "Perso") + ".json";
+        a.click();
     }
 
-    window.onload = function() {
-        changeTheme();
-    };
+    function importCharacter(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = JSON.parse(e.target.result);
+            formsData = data.formsData || formsData;
+            textFields.forEach(id => { const el = document.getElementById(id); if(data[id] !== undefined && el) el.value = data[id]; });
+            imageIds.forEach(id => { const img = document.getElementById(id); if(data[id] && img) { img.src = data[id]; img.style.display = 'block'; } });
+            changeTheme();
+            updateSelectedFormTitle();
+        };
+        reader.readAsText(file);
+    }
+
+    window.onload = changeTheme;
 </script>
 
 </body>
