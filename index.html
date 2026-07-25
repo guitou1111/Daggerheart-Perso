@@ -119,7 +119,13 @@
         @media (max-width: 500px) {
             .grid-cards, .grid-3-strict, .grid-6-strict { grid-template-columns: 1fr; }
         }
-   
+		
+		/* Cache par défaut la carte */
+		.card-druid-only { display: none; }
+
+		/* Affiche la carte uniquement si le thème est Druide */
+		body.theme-Druide .card-druid-only { display: flex; }
+
 		.gauge-compact button {
 			padding: 2px 8px;
 			margin: 0 2px;
@@ -254,26 +260,88 @@
 </div>
 
     <!-- EXPÉRIENCES -->
-    <div class="section-panel">
-        <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Expériences</h3>
-        <div class="grid-3-strict" style="margin-bottom: 0;">
-            <div class="stat-box"><input type="text" id="exp1Name" placeholder="Expérience 1" style="text-align:left; width:100%;"><input type="number" id="exp1Val" value="2"></div>
-            <div class="stat-box"><input type="text" id="exp2Name" placeholder="Expérience 2" style="text-align:left; width:100%;"><input type="number" id="exp2Val" value="1"></div>
-            <div class="stat-box"><input type="text" id="exp3Name" placeholder="Expérience 3" style="text-align:left; width:100%;"><input type="number" id="exp3Val" value="0"></div>
-        </div>
-    </div>
+	<div class="section-panel">
+		<h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Expériences</h3>
+		<div class="grid-3-strict" style="margin-bottom: 0;">
+			
+			<!-- Expérience 1 -->
+			<div class="stat-box" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+				<!-- Ligne 1 : Titre + Valeur -->
+				<div style="display: flex; flex-direction: row; gap: 8px; align-items: center; width: 100%;">
+					<input type="text" id="exp1Name" placeholder="Titre Expérience 1" style="flex: 1;">
+					<input type="number" id="exp1Val" value="2" style="width: 60px; flex-shrink: 0; text-align: center; font-weight: bold;">
+				</div>
+				<!-- Ligne 2 : Description -->
+				<textarea id="exp1Desc" placeholder="Description de l'expérience..." rows="3" style="width: 100%; resize: vertical;"></textarea>
+			</div>
+
+			<!-- Expérience 2 -->
+			<div class="stat-box" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+				<!-- Ligne 1 : Titre + Valeur -->
+				<div style="display: flex; flex-direction: row; gap: 8px; align-items: center; width: 100%;">
+					<input type="text" id="exp2Name" placeholder="Titre Expérience 2" style="flex: 1;">
+					<input type="number" id="exp2Val" value="1" style="width: 60px; flex-shrink: 0; text-align: center; font-weight: bold;">
+				</div>
+				<!-- Ligne 2 : Description -->
+				<textarea id="exp2Desc" placeholder="Description de l'expérience..." rows="3" style="width: 100%; resize: vertical;"></textarea>
+			</div>
+
+			<!-- Expérience 3 -->
+			<div class="stat-box" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+				<!-- Ligne 1 : Titre + Valeur -->
+				<div style="display: flex; flex-direction: row; gap: 8px; align-items: center; width: 100%;">
+					<input type="text" id="exp3Name" placeholder="Titre Expérience 3" style="flex: 1;">
+					<input type="number" id="exp3Val" value="0" style="width: 60px; flex-shrink: 0; text-align: center; font-weight: bold;">
+				</div>
+				<!-- Ligne 2 : Description -->
+				<textarea id="exp3Desc" placeholder="Description de l'expérience..." rows="3" style="width: 100%; resize: vertical;"></textarea>
+			</div>
+
+		</div>
+	</div>
 
     <!-- CARTES DE FONDATION (3 par ligne de large) -->
-    <div class="section-panel">
-        <h3>Fondations</h3>
-        <div class="grid-cards">
-            <div class="card"><input type="text" id="classCardName" class="card-title" placeholder="Classe"><img id="imgClass" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgClass')"></div>
-            <div class="card"><input type="text" id="ancestryCardName" class="card-title" placeholder="Ascendance"><img id="imgAncestry" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgAncestry')"></div>
-            <div class="card"><input type="text" id="communityCardName" class="card-title" placeholder="Communauté"><img id="imgCommunity" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgCommunity')"></div>
-            <div class="card"><input type="text" id="originCardName" class="card-title" placeholder="Origine"><img id="imgOrigin" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgOrigin')"></div>
-        </div>
+	<div class="section-panel">
+		<h3>Fondations & Formes Animales</h3>
+		<div class="grid-cards">
+			<div class="card"><input type="text" id="classCardName" class="card-title" placeholder="Classe"><img id="imgClass" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgClass')"></div>
+			<div class="card"><input type="text" id="ancestryCardName" class="card-title" placeholder="Ascendance"><img id="imgAncestry" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgAncestry')"></div>
+			<div class="card"><input type="text" id="communityCardName" class="card-title" placeholder="Communauté"><img id="imgCommunity" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgCommunity')"></div>
+			<div class="card"><input type="text" id="originCardName" class="card-title" placeholder="Origine"><img id="imgOrigin" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgOrigin')"></div>
+			
+	<!-- SÉLECTEUR DE FORME & CHECKBOX ALIGNÉS -->
+	<div class="card card-druid-only" style="justify-content: flex-start;">
+		<!-- Ligne de sélection -->
+		<div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 10px;">
+			<div style="display: flex; align-items: center; gap: 5px;">
+				<input type="checkbox" id="toggleAnimalForms" onchange="updateAnimalVisibility()">
+				<label for="toggleAnimalForms" style="margin:0; white-space: nowrap;">Afficher config</label>
+			</div>
+			<div style="display: flex; align-items: center; gap: 5px; flex-grow: 1;">
+				<label for="activeAnimalForm" style="margin:0; white-space: nowrap;">Forme Active :</label>
+				<select id="activeAnimalForm" style="flex-grow: 1;" onchange="updateSelectedFormTitle()">
+					<option value="none">Aucune</option>
+					<option value="form1" id="optForm1">Forme 1</option>
+					<option value="form2" id="optForm2">Forme 2</option>
+					<option value="form3" id="optForm3">Forme 3</option>
+					<option value="form4" id="optForm4">Forme 4</option>
+					<option value="form5" id="optForm5">Forme 5</option>
+					<option value="form6" id="optForm6">Forme 6</option>
+				</select>
+			</div>
+		</div>
+
+		<!-- Zone de configuration (intégrée DANS la carte) -->
+		<div id="animalFormsContainer" style="display:none; border-top: 1px solid var(--primary-gold); padding-top:10px;">
+			<input type="text" id="activeFormName" class="card-title" placeholder="Nom de la forme" oninput="updateMenuNames()">
+			<img id="imgActiveForm" class="card-img-preview" src="">
+			<input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgActiveForm')">
+		</div>
+	</div>
+	</div>
     </div>
 
+	
     <!-- CARTES D'ÉQUIPEMENT (3 par ligne de large) -->
     <div class="section-panel">
         <h3>Équipement Actif</h3>
@@ -308,12 +376,20 @@
 </div>
 
 <script>
+    // --- INITIALISATION DES DONNÉES ---
+    let formsData = {
+        form1: { name: "", img: "" }, form2: { name: "", img: "" },
+        form3: { name: "", img: "" }, form4: { name: "", img: "" },
+        form5: { name: "", img: "" }, form6: { name: "", img: "" }
+    };
+
     // --- GESTION DU THÈME ---
     function changeTheme() {
         document.body.className = document.getElementById('themeSelect').value;
+        updateAnimalVisibility();
     }
 
-    // --- GESTION DES IMAGES EN BASE64 ---
+    // --- GESTION DES IMAGES ---
     function loadImage(event, imgId) {
         const file = event.target.files[0];
         if (file) {
@@ -322,73 +398,114 @@
                 const imgTag = document.getElementById(imgId);
                 imgTag.src = e.target.result;
                 imgTag.style.display = 'block';
+                saveCurrentForm(); // Sauvegarde automatiquement lors du changement d'image
             }
             reader.readAsDataURL(file);
         }
     }
 
-    // --- SAUVEGARDE ET CHARGEMENT PAR FICHIER JSON ---
     const textFields = [
         "themeSelect", "charName", "charPronouns", "charLevel",
         "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr",
-        "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds",
-        "exp1Name", "exp1Val", "exp2Name", "exp2Val", "exp3Name", "exp3Val",
+        "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", 
+        "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds",
+        "exp1Name", "exp1Val", "exp1Desc", "exp2Name", "exp2Val", "exp2Desc", "exp3Name", "exp3Val", "exp3Desc",
         "classCardName", "ancestryCardName", "communityCardName", "originCardName",
         "wpn1Name", "wpn2Name", "armorName",
         "card1Name", "card2Name", "card3Name", "card4Name", "card5Name",
-        "invSlots", "invGold", "adventureNotes"
+        "invSlots", "invGold", "adventureNotes",
+        "activeAnimalForm", "toggleAnimalForms"
     ];
 
-    const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
+    const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgActiveForm", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
 
     function exportCharacter() {
+        saveCurrentForm();
         const data = {};
-        textFields.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.value; });
-        imageIds.forEach(id => { const img = document.getElementById(id); if(img && img.src && img.src.startsWith('data:image')) data[id] = img.src; });
+        textFields.forEach(id => { 
+            const el = document.getElementById(id); 
+            if(el) data[id] = (el.type === "checkbox") ? el.checked : el.value;
+        });
+        imageIds.forEach(id => { const img = document.getElementById(id); if(img && img.src.startsWith('data:image')) data[id] = img.src; });
+        data.formsData = formsData;
 
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-        const downloadAnchorNode = document.createElement('a');
-        downloadAnchorNode.setAttribute("href", dataStr);
-        let charName = document.getElementById("charName").value.trim() || "Inconnu";
-        downloadAnchorNode.setAttribute("download", "Daggerheart_" + charName + ".json");
-        document.body.appendChild(downloadAnchorNode); 
-        downloadAnchorNode.click();
-        downloadAnchorNode.remove();
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = (document.getElementById("charName").value || "Daggerheart_Perso") + ".json";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
     }
 
     function importCharacter(event) {
         const file = event.target.files[0];
         if (!file) return;
-
         const reader = new FileReader();
         reader.onload = function(e) {
             try {
                 const data = JSON.parse(e.target.result);
-                textFields.forEach(id => { if(data[id] !== undefined && document.getElementById(id)) document.getElementById(id).value = data[id]; });
+                formsData = data.formsData || formsData;
+                textFields.forEach(id => { 
+                    const el = document.getElementById(id);
+                    if(data[id] !== undefined && el) {
+                        if (el.type === "checkbox") el.checked = (data[id] === true || data[id] === "true");
+                        else el.value = data[id];
+                    }
+                });
                 changeTheme();
-
                 imageIds.forEach(id => {
                     const imgTag = document.getElementById(id);
-                    if(data[id] && imgTag) { imgTag.src = data[id]; imgTag.style.display = 'block'; } 
+                    if(data[id] && imgTag) { imgTag.src = data[id]; imgTag.style.display = 'block'; }
                     else if (imgTag) { imgTag.src = ""; imgTag.style.display = 'none'; }
                 });
-            } catch (err) {
-                alert("Fichier de sauvegarde invalide.");
-            }
+                updateSelectedFormTitle();
+            } catch (err) { alert("Erreur de lecture."); }
         };
         reader.readAsText(file);
-        event.target.value = "";
     }
 
-    window.onload = changeTheme;
-
-function modifyValue(id, delta) {
-    const input = document.getElementById(id);
-    if (input) {
-        let val = parseInt(input.value) || 0;
-        input.value = val + delta;
+    function saveCurrentForm() {
+        const activeId = document.getElementById('activeAnimalForm').value;
+        if (activeId !== "none") {
+            formsData[activeId].name = document.getElementById('activeFormName').value;
+            formsData[activeId].img = document.getElementById('imgActiveForm').src;
+        }
     }
-}
+
+    function updateSelectedFormTitle() {
+        const select = document.getElementById('activeAnimalForm');
+        const container = document.getElementById('animalFormsContainer');
+        const formId = select.value;
+        
+        if (formId === "none") {
+            container.style.display = 'none';
+        } else {
+            container.style.display = 'block';
+            document.getElementById('activeFormName').value = formsData[formId].name || "";
+            const img = document.getElementById('imgActiveForm');
+            img.src = formsData[formId].img || "";
+            img.style.display = formsData[formId].img ? 'block' : 'none';
+        }
+    }
+
+    function updateAnimalVisibility() {
+        const mainContainer = document.getElementById('animalFormsContainer');
+        const isDruid = document.getElementById('themeSelect').value === 'theme-Druide';
+        const isChecked = document.getElementById('toggleAnimalForms').checked;
+        
+        // Affiche le bloc de configuration uniquement si Druide + Checkbox cochée
+        // Note: l'affichage réel dépend du choix dans le menu "Forme Active" (voir updateSelectedFormTitle)
+        if (isDruid && isChecked) {
+            updateSelectedFormTitle();
+        } else {
+            document.getElementById('animalFormsContainer').style.display = 'none';
+        }
+    }
+
+    window.onload = function() {
+        changeTheme();
+    };
 </script>
 
 </body>
