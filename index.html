@@ -181,12 +181,61 @@
     <div class="section-panel">
         <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Caractéristiques</h3>
         <div class="grid-6-strict">
-            <div class="stat-box"><label>Agilité</label><input type="number" id="statAgi" value="0"></div>
-            <div class="stat-box"><label>Finesse</label><input type="number" id="statFin" value="0"></div>
-            <div class="stat-box"><label>Instinct</label><input type="number" id="statIns" value="0"></div>
-            <div class="stat-box"><label>Présence</label><input type="number" id="statPre" value="0"></div>
-            <div class="stat-box"><label>Savoir</label><input type="number" id="statKno" value="0"></div>
-            <div class="stat-box"><label>Force</label><input type="number" id="statStr" value="0"></div>
+            
+            <div class="stat-box">
+                <label>Agilité</label>
+                <div class="gauge-compact">
+                    <button onclick="modifyValue('statAgi', -1)">-</button>
+                    <input type="number" id="statAgi" value="0">
+                    <button onclick="modifyValue('statAgi', 1)">+</button>
+                </div>
+            </div>
+            
+            <div class="stat-box">
+                <label>Finesse</label>
+                <div class="gauge-compact">
+                    <button onclick="modifyValue('statFin', -1)">-</button>
+                    <input type="number" id="statFin" value="0">
+                    <button onclick="modifyValue('statFin', 1)">+</button>
+                </div>
+            </div>
+            
+            <div class="stat-box">
+                <label>Instinct</label>
+                <div class="gauge-compact">
+                    <button onclick="modifyValue('statIns', -1)">-</button>
+                    <input type="number" id="statIns" value="0">
+                    <button onclick="modifyValue('statIns', 1)">+</button>
+                </div>
+            </div>
+            
+            <div class="stat-box">
+                <label>Présence</label>
+                <div class="gauge-compact">
+                    <button onclick="modifyValue('statPre', -1)">-</button>
+                    <input type="number" id="statPre" value="0">
+                    <button onclick="modifyValue('statPre', 1)">+</button>
+                </div>
+            </div>
+            
+            <div class="stat-box">
+                <label>Savoir</label>
+                <div class="gauge-compact">
+                    <button onclick="modifyValue('statKno', -1)">-</button>
+                    <input type="number" id="statKno" value="0">
+                    <button onclick="modifyValue('statKno', 1)">+</button>
+                </div>
+            </div>
+            
+            <div class="stat-box">
+                <label>Force</label>
+                <div class="gauge-compact">
+                    <button onclick="modifyValue('statStr', -1)">-</button>
+                    <input type="number" id="statStr" value="0">
+                    <button onclick="modifyValue('statStr', 1)">+</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
