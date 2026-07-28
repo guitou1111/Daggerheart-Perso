@@ -112,12 +112,22 @@
 
         .portrait-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-gold); display: none; margin: 0 auto 5px auto; }
 
+        /* Styles spécifiques Montée de Niveau */
+        .level-up-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
+        .level-tier { background-color: var(--bg-input); border: 1px solid var(--border-color); border-radius: 6px; padding: 15px; display: flex; flex-direction: column; }
+        .tier-header { text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid var(--primary-gold); color: var(--primary-gold); }
+        .tier-intro { background-color: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; font-style: italic; margin-bottom: 15px; font-size: 0.85em; text-align: justify; }
+        .tier-sub { text-align: center; margin-bottom: 15px; font-size: 0.85em; }
+        .tier-option { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; font-size: 0.85em; }
+        .tier-boxes { display: flex; gap: 3px; flex-shrink: 0; }
+        .tier-footer { margin-top: auto; padding-top: 15px; border-top: 1px dashed var(--border-color); font-size: 0.85em; text-align: justify; }
+        
         @media (max-width: 850px) {
-            .grid-cards, .grid-3-strict { grid-template-columns: repeat(2, 1fr); }
+            .grid-cards, .grid-3-strict, .level-up-container { grid-template-columns: repeat(2, 1fr); }
             .grid-6-strict { grid-template-columns: repeat(3, 1fr); }
         }
-        @media (max-width: 500px) {
-            .grid-cards, .grid-3-strict, .grid-6-strict { grid-template-columns: 1fr; }
+        @media (max-width: 600px) {
+            .grid-cards, .grid-3-strict, .grid-6-strict, .level-up-container { grid-template-columns: 1fr; }
         }
         
         /* Capacités Spéciales par classe */
@@ -169,7 +179,6 @@
                 <option value="theme-Seraphin">Séraphin</option>
                 <option value="theme-Sorcier">Sorcier</option>
             </select>
-            <!-- Boutons Import Export -->
             <button onclick="exportCharacter()">⬇️ Exporter</button>
             <label for="importFile" class="btn-file" style="margin: 0;">⬆️ Importer</label>
             <input type="file" id="importFile" accept=".json" onchange="importCharacter(event)" style="display: none;">
@@ -192,7 +201,7 @@
         </div>
     </div>
 
-    <!-- CARACTÉRISTIQUES (Étiquettes à gauche, 6 en ligne) -->
+    <!-- CARACTÉRISTIQUES -->
     <div class="section-panel">
         <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Caractéristiques</h3>
         <div class="grid-6-strict">
@@ -247,113 +256,28 @@
         </div>
     </div>
 
-    <!-- JAUGES & DÉFENSE (Étiquettes à gauche, 2 lignes de 3) -->
+    <!-- JAUGES & DÉFENSE -->
     <div class="section-panel">
     <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Jauges & Défense</h3>
-    
     <div class="grid-3-strict">
-        <!-- HP -->
-        <div class="stat-box">
-            <label>❤️ HP</label>
-            <div class="gauge-compact">
-                <button onclick="modifyValue('valHPCurr', -1)">-</button>
-                <input type="number" id="valHPCurr" value="6">
-                <button onclick="modifyValue('valHPCurr', 1)">+</button>
-                <span class="gauge-separator">/</span>
-                <input type="number" id="valHPMax" value="6">
-            </div>
-        </div>
-        <!-- Stress -->
-        <div class="stat-box">
-            <label>🧠 Stress</label>
-            <div class="gauge-compact">
-                <button onclick="modifyValue('valStressCurr', -1)">-</button>
-                <input type="number" id="valStressCurr" value="0">
-                <button onclick="modifyValue('valStressCurr', 1)">+</button>
-                <span class="gauge-separator">/</span>
-                <input type="number" id="valStressMax" value="5">
-            </div>
-        </div>
-        <!-- Espoir -->
-        <div class="stat-box">
-            <label>✨ Espoir</label>
-            <div class="gauge-compact">
-                <button onclick="modifyValue('valHopeCurr', -1)">-</button>
-                <input type="number" id="valHopeCurr" value="2">
-                <button onclick="modifyValue('valHopeCurr', 1)">+</button>
-                <span class="gauge-separator">/</span>
-                <input type="number" id="valHopeMax" value="5">
-            </div>
-        </div>
+        <div class="stat-box"><label>❤️ HP</label><div class="gauge-compact"><button onclick="modifyValue('valHPCurr', -1)">-</button><input type="number" id="valHPCurr" value="6"><button onclick="modifyValue('valHPCurr', 1)">+</button><span class="gauge-separator">/</span><input type="number" id="valHPMax" value="6"></div></div>
+        <div class="stat-box"><label>🧠 Stress</label><div class="gauge-compact"><button onclick="modifyValue('valStressCurr', -1)">-</button><input type="number" id="valStressCurr" value="0"><button onclick="modifyValue('valStressCurr', 1)">+</button><span class="gauge-separator">/</span><input type="number" id="valStressMax" value="5"></div></div>
+        <div class="stat-box"><label>✨ Espoir</label><div class="gauge-compact"><button onclick="modifyValue('valHopeCurr', -1)">-</button><input type="number" id="valHopeCurr" value="2"><button onclick="modifyValue('valHopeCurr', 1)">+</button><span class="gauge-separator">/</span><input type="number" id="valHopeMax" value="5"></div></div>
     </div>
-
     <div class="grid-3-strict" style="margin-bottom: 0;">
-        <!-- Esquive -->
-        <div class="stat-box">
-            <label>🏃 Esquive</label>
-            <div>
-                <button onclick="modifyValue('valEvasion', -1)">-</button>
-                <input type="number" id="valEvasion" value="8">
-                <button onclick="modifyValue('valEvasion', 1)">+</button>
-            </div>
-        </div>
-        <!-- Armure -->
-        <div class="stat-box">
-            <label>🛡️ Armure</label>
-            <div class="gauge-compact">
-                <button onclick="modifyValue('valArmorCurr', -1)">-</button>
-                <input type="number" id="valArmorCurr" value="0">
-                <button onclick="modifyValue('valArmorCurr', 1)">+</button>
-                <span class="gauge-separator">/</span>
-                <input type="number" id="valArmorMax" value="3">
-            </div>
-        </div>
-        <!-- Seuils (Note: pas de boutons pour le texte) -->
-        <div class="stat-box">
-            <label>⚖️ Seuils</label>
-            <input type="text" id="valThresholds" placeholder="5/10/15">
-        </div>
+        <div class="stat-box"><label>🏃 Esquive</label><div><button onclick="modifyValue('valEvasion', -1)">-</button><input type="number" id="valEvasion" value="8"><button onclick="modifyValue('valEvasion', 1)">+</button></div></div>
+        <div class="stat-box"><label>🛡️ Armure</label><div class="gauge-compact"><button onclick="modifyValue('valArmorCurr', -1)">-</button><input type="number" id="valArmorCurr" value="0"><button onclick="modifyValue('valArmorCurr', 1)">+</button><span class="gauge-separator">/</span><input type="number" id="valArmorMax" value="3"></div></div>
+        <div class="stat-box"><label>⚖️ Seuils</label><input type="text" id="valThresholds" placeholder="5/10/15"></div>
     </div>
-</div>
+    </div>
 
     <!-- EXPÉRIENCES -->
     <div class="section-panel">
         <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Expériences</h3>
         <div class="grid-3-strict" style="margin-bottom: 0;">
-            
-            <!-- Expérience 1 -->
-            <div class="stat-box" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
-                <!-- Ligne 1 : Titre + Valeur -->
-                <div style="display: flex; flex-direction: row; gap: 8px; align-items: center; width: 100%;">
-                    <input type="text" id="exp1Name" placeholder="Titre Expérience 1" style="flex: 1;">
-                    <input type="number" id="exp1Val" value="2" style="width: 60px; flex-shrink: 0; text-align: center; font-weight: bold;">
-                </div>
-                <!-- Ligne 2 : Description -->
-                <textarea id="exp1Desc" placeholder="Description de l'expérience..." rows="3" style="width: 100%; resize: vertical;"></textarea>
-            </div>
-
-            <!-- Expérience 2 -->
-            <div class="stat-box" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
-                <!-- Ligne 1 : Titre + Valeur -->
-                <div style="display: flex; flex-direction: row; gap: 8px; align-items: center; width: 100%;">
-                    <input type="text" id="exp2Name" placeholder="Titre Expérience 2" style="flex: 1;">
-                    <input type="number" id="exp2Val" value="1" style="width: 60px; flex-shrink: 0; text-align: center; font-weight: bold;">
-                </div>
-                <!-- Ligne 2 : Description -->
-                <textarea id="exp2Desc" placeholder="Description de l'expérience..." rows="3" style="width: 100%; resize: vertical;"></textarea>
-            </div>
-
-            <!-- Expérience 3 -->
-            <div class="stat-box" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
-                <!-- Ligne 1 : Titre + Valeur -->
-                <div style="display: flex; flex-direction: row; gap: 8px; align-items: center; width: 100%;">
-                    <input type="text" id="exp3Name" placeholder="Titre Expérience 3" style="flex: 1;">
-                    <input type="number" id="exp3Val" value="0" style="width: 60px; flex-shrink: 0; text-align: center; font-weight: bold;">
-                </div>
-                <!-- Ligne 2 : Description -->
-                <textarea id="exp3Desc" placeholder="Description de l'expérience..." rows="3" style="width: 100%; resize: vertical;"></textarea>
-            </div>
-
+            <div class="stat-box" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;"><div style="display: flex; flex-direction: row; gap: 8px; align-items: center; width: 100%;"><input type="text" id="exp1Name" placeholder="Titre Expérience 1" style="flex: 1;"><input type="number" id="exp1Val" value="2" style="width: 60px; flex-shrink: 0; text-align: center; font-weight: bold;"></div><textarea id="exp1Desc" placeholder="Description..." rows="3" style="width: 100%; resize: vertical;"></textarea></div>
+            <div class="stat-box" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;"><div style="display: flex; flex-direction: row; gap: 8px; align-items: center; width: 100%;"><input type="text" id="exp2Name" placeholder="Titre Expérience 2" style="flex: 1;"><input type="number" id="exp2Val" value="1" style="width: 60px; flex-shrink: 0; text-align: center; font-weight: bold;"></div><textarea id="exp2Desc" placeholder="Description..." rows="3" style="width: 100%; resize: vertical;"></textarea></div>
+            <div class="stat-box" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;"><div style="display: flex; flex-direction: row; gap: 8px; align-items: center; width: 100%;"><input type="text" id="exp3Name" placeholder="Titre Expérience 3" style="flex: 1;"><input type="number" id="exp3Val" value="0" style="width: 60px; flex-shrink: 0; text-align: center; font-weight: bold;"></div><textarea id="exp3Desc" placeholder="Description..." rows="3" style="width: 100%; resize: vertical;"></textarea></div>
         </div>
     </div>
 
@@ -371,16 +295,25 @@
                 <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
                     <label for="activeAnimalForm" style="margin:0; white-space: nowrap;">Forme Active :</label>
                     <select id="activeAnimalForm" style="flex-grow: 1;" onchange="updateSelectedFormTitle()">
-                        <option value="none">Aucune</option>
-                        <option value="form1">Forme 1</option>
-                        <option value="form2">Forme 2</option>
-                        <option value="form3">Forme 3</option>
-                        <option value="form4">Forme 4</option>
-                        <option value="form5">Forme 5</option>
-                        <option value="form6">Forme 6</option>
-                    </select>
+						<option value="none">Aucune</option>
+						<optgroup label="Palier 1 (T1)">
+							<option value="form1">T1 - Ami Domestique</option>
+							<option value="form2">T1 - Brouteur Agile</option>
+							<option value="form3">T1 - Eclaireur agile</option>
+							<option value="form4">T1 - Eclaireur aquatique</option>
+							<option value="form5">T1 - Prédateur de Meute</option>
+							<option value="form6">T1 - Traqueur Arachnide</option>
+						</optgroup>
+						<optgroup label="Palier 2 (T2)">
+							<option value="form7">T2 - Sentinelle Blindée</option>
+							<option value="form8">T2 - Grand Marcheur</option>
+							<option value="form9">T2 - Prédateur Bondissant</option>
+							<option value="form10">T2 - Bête ailée</option>
+							<option value="form11">T2 - Bête puissante</option>
+							<option value="form12">T2 - Serpent frappeur</option>
+						</optgroup>
+					</select>
                 </div>
-                <!-- Zone de configuration de la forme (Druide) -->
                 <div id="animalFormsContainer" style="display:none; border-top: 1px solid var(--primary-gold); padding-top:10px;">
                     <input type="text" id="activeFormName" class="card-title" placeholder="Nom de la forme" oninput="saveCurrentForm()">
                     <img id="imgActiveForm" class="card-img-preview" src="">
@@ -391,28 +324,18 @@
             <!-- SÉRAPHIN : DÉS DE PRIÈRES -->
             <div class="card card-seraphin-only" style="justify-content: flex-start;">
                 <label class="card-title" style="border:none; margin-bottom:5px;">Dés de Prières</label>
-                
                 <div class="stat-box" style="margin-bottom: 10px;">
                     <label>Incantation</label>
-                    <div class="gauge-compact">
-                        <button onclick="modifyValue('seraphinTrait', -1)">-</button>
-                        <input type="number" id="seraphinTrait" value="1">
-                        <button onclick="modifyValue('seraphinTrait', 1)">+</button>
-                    </div>
+                    <div class="gauge-compact"><button onclick="modifyValue('seraphinTrait', -1)">-</button><input type="number" id="seraphinTrait" value="1"><button onclick="modifyValue('seraphinTrait', 1)">+</button></div>
                 </div>
-
                 <button onclick="rollPrayerDice()" style="width: 100%; margin-bottom: 8px;">🎲 Lancer les dés (d4)</button>
                 <div style="font-size: 0.75em; color: var(--text-light); margin-bottom: 8px;">Cliquez sur un dé pour le dépenser.</div>
-                
-                <div id="prayerDiceContainer" style="display: flex; flex-wrap: wrap; justify-content: center;">
-                    <!-- Les dés générés apparaîtront ici -->
-                </div>
+                <div id="prayerDiceContainer" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
             </div>
-
         </div>
     </div>
 
-    <!-- CARTES D'ÉQUIPEMENT (3 par ligne de large) -->
+    <!-- CARTES D'ÉQUIPEMENT -->
     <div class="section-panel">
         <h3>Équipement Actif</h3>
         <div class="grid-cards">
@@ -422,7 +345,7 @@
         </div>
     </div>
 
-    <!-- CARTES DE DOMAINE (3 par ligne de large) -->
+    <!-- CARTES DE DOMAINE -->
     <div class="section-panel">
         <h3>Cartes de Domaine</h3>
         <div class="grid-cards">
@@ -443,17 +366,133 @@
         </div>
     </div>
 
+    <!-- NOUVEAU BLOC : MONTÉE DE NIVEAU (Dépliable) -->
+    <details class="section-panel">
+        <summary style="cursor: pointer; font-size: 1.2em; font-weight: bold; color: var(--primary-gold); outline: none;">
+            📈 Montée de Niveau
+        </summary>
+        
+        <div class="level-up-container">
+            <!-- PALIER 2 -->
+            <div class="level-tier">
+                <div class="tier-header">PALIER 2 : NIVEAUX 2–4</div>
+                <div class="tier-intro">Au niveau 2, gagnez une Expérience supplémentaire à +2 et gagnez un bonus de +1 à votre Compétence.</div>
+                <div class="tier-sub">Choisissez deux options dans la liste ci-dessous et cochez-les.</div>
+                
+                <!-- Option 1 avec les 6 traits -->
+                <div class="tier-option" style="flex-direction: column;">
+                    <div style="display: flex; gap: 8px; align-items: flex-start;">
+                        <div class="tier-boxes"><input type="checkbox" id="lvl2_cb_trait1"><input type="checkbox" id="lvl2_cb_trait2"><input type="checkbox" id="lvl2_cb_trait3"></div>
+                        <label class="cb-label" for="lvl2_cb_trait1">Gagnez un bonus de +1 à deux traits de personnage non cochés et cochez-les.</label>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding-left: 25px; margin-top: 2px;">
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl2_trait_agi"> Agilité</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl2_trait_fin"> Finesse</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl2_trait_ins"> Instinct</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl2_trait_pre"> Présence</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl2_trait_kno"> Savoir</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl2_trait_str"> Force</label>
+                    </div>
+                </div>
+
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl2_cb_hp1"><input type="checkbox" id="lvl2_cb_hp2"></div><label class="cb-label" for="lvl2_cb_hp1">Gagnez de façon permanente un emplacement de point de Blessure.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl2_cb_str1"><input type="checkbox" id="lvl2_cb_str2"></div><label class="cb-label" for="lvl2_cb_str1">Gagnez de façon permanente un emplacement de Stress.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl2_cb_exp1"><input type="checkbox" id="lvl2_cb_exp2"></div><label class="cb-label" for="lvl2_cb_exp1">Gagnez de façon permanente un bonus de +1 à deux Expériences.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl2_cb_dom1"></div><label class="cb-label" for="lvl2_cb_dom1">Choisissez une carte de domaine supplémentaire de votre niveau ou de niveau inférieur dans un domaine auquel vous avez accès (jusqu'au niveau 4).</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl2_cb_esq1"></div><label class="cb-label" for="lvl2_cb_esq1">Gagnez de façon permanente un bonus de +1 à votre Esquive.</label></div>
+                
+                <div class="tier-footer">Mettez à jour votre niveau et ajustez vos seuils de dégâts en conséquence. Prenez une carte de domaine supplémentaire de votre niveau ou de niveau inférieur dans un domaine auquel vous avez accès.</div>
+            </div>
+
+            <!-- PALIER 3 -->
+            <div class="level-tier">
+                <div class="tier-header">PALIER 3 : NIVEAUX 5–7</div>
+                <div class="tier-intro">Au niveau 5, gagnez une Expérience supplémentaire à +2 et effacez toutes les coches sur les traits de personnage. Gagnez ensuite un bonus de +1 à votre Compétence.</div>
+                <div class="tier-sub">Choisissez deux options dans la liste ci-dessous (ou toute option d'un palier précédent) et cochez-les.</div>
+                
+                <!-- Option 1 avec les 6 traits -->
+                <div class="tier-option" style="flex-direction: column;">
+                    <div style="display: flex; gap: 8px; align-items: flex-start;">
+                        <div class="tier-boxes"><input type="checkbox" id="lvl3_cb_trait1"><input type="checkbox" id="lvl3_cb_trait2"><input type="checkbox" id="lvl3_cb_trait3"></div>
+                        <label class="cb-label" for="lvl3_cb_trait1">Gagnez un bonus de +1 à deux traits de personnage non cochés et cochez-les.</label>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding-left: 25px; margin-top: 2px;">
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl3_trait_agi"> Agilité</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl3_trait_fin"> Finesse</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl3_trait_ins"> Instinct</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl3_trait_pre"> Présence</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl3_trait_kno"> Savoir</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl3_trait_str"> Force</label>
+                    </div>
+                </div>
+
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl3_cb_hp1"><input type="checkbox" id="lvl3_cb_hp2"></div><label class="cb-label" for="lvl3_cb_hp1">Gagnez de façon permanente un emplacement de point de Blessure.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl3_cb_str1"><input type="checkbox" id="lvl3_cb_str2"></div><label class="cb-label" for="lvl3_cb_str1">Gagnez de façon permanente un emplacement de Stress.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl3_cb_exp1"></div><label class="cb-label" for="lvl3_cb_exp1">Gagnez de façon permanente un bonus de +1 à deux Expériences.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl3_cb_dom1"></div><label class="cb-label" for="lvl3_cb_dom1">Choisissez une carte de domaine supplémentaire de votre niveau ou de niveau inférieur dans un domaine auquel vous avez accès (jusqu'au niveau 7).</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl3_cb_esq1"></div><label class="cb-label" for="lvl3_cb_esq1">Gagnez de façon permanente un bonus de +1 à votre Esquive.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl3_cb_sub1"></div><label class="cb-label" for="lvl3_cb_sub1">Prenez une carte de sous-classe améliorée. Rayez ensuite l'option de Multiclassage pour ce palier.</label></div>
+                <div class="tier-option"><div class="tier-boxes" style="flex-direction: column;"><input type="checkbox" id="lvl3_cb_comp1"><input type="checkbox" id="lvl3_cb_comp2"></div><label class="cb-label" style="display:flex; align-items:center;" for="lvl3_cb_comp1">Augmentez votre Compétence de +1.</label></div>
+                <div class="tier-option"><div class="tier-boxes" style="flex-direction: column;"><input type="checkbox" id="lvl3_cb_multi1"><input type="checkbox" id="lvl3_cb_multi2"></div><label class="cb-label" for="lvl3_cb_multi1">Multiclassage. Choisissez une classe supplémentaire pour votre personnage, puis rayez l'option inutilisée « Prenez une carte de sous-classe améliorée » et l'autre option de Multiclassage de cette fiche.</label></div>
+                
+                <div class="tier-footer">Mettez à jour votre niveau et ajustez vos seuils de dégâts en conséquence. Prenez une carte de domaine supplémentaire de votre niveau ou de niveau inférieur dans un domaine auquel vous avez accès.</div>
+            </div>
+
+            <!-- PALIER 4 -->
+            <div class="level-tier">
+                <div class="tier-header">PALIER 4 : NIVEAUX 8–10</div>
+                <div class="tier-intro">Au niveau 8, gagnez une Expérience supplémentaire à +2 et effacez toutes les coches sur les traits de personnage. Gagnez ensuite un bonus de +1 à votre Compétence.</div>
+                <div class="tier-sub">Choisissez deux options dans la liste ci-dessous (ou toute option d'un palier précédent) et cochez-les.</div>
+                
+                <!-- Option 1 avec les 6 traits -->
+                <div class="tier-option" style="flex-direction: column;">
+                    <div style="display: flex; gap: 8px; align-items: flex-start;">
+                        <div class="tier-boxes"><input type="checkbox" id="lvl4_cb_trait1"><input type="checkbox" id="lvl4_cb_trait2"><input type="checkbox" id="lvl4_cb_trait3"></div>
+                        <label class="cb-label" for="lvl4_cb_trait1">Gagnez un bonus de +1 à deux traits de personnage non cochés et cochez-les.</label>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding-left: 25px; margin-top: 2px;">
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl4_trait_agi"> Agilité</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl4_trait_fin"> Finesse</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl4_trait_ins"> Instinct</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl4_trait_pre"> Présence</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl4_trait_kno"> Savoir</label>
+                        <label style="font-weight:normal; display:flex; align-items:center; gap:4px;"><input type="checkbox" id="lvl4_trait_str"> Force</label>
+                    </div>
+                </div>
+
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl4_cb_hp1"><input type="checkbox" id="lvl4_cb_hp2"></div><label class="cb-label" for="lvl4_cb_hp1">Gagnez de façon permanente un emplacement de point de Blessure.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl4_cb_str1"><input type="checkbox" id="lvl4_cb_str2"></div><label class="cb-label" for="lvl4_cb_str1">Gagnez de façon permanente un emplacement de Stress.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl4_cb_exp1"></div><label class="cb-label" for="lvl4_cb_exp1">Gagnez de façon permanente un bonus de +1 à deux Expériences.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl4_cb_dom1"></div><label class="cb-label" for="lvl4_cb_dom1">Choisissez une carte de domaine supplémentaire de votre niveau ou de niveau inférieur dans un domaine auquel vous avez accès.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl4_cb_esq1"></div><label class="cb-label" for="lvl4_cb_esq1">Gagnez de façon permanente un bonus de +1 à votre Esquive.</label></div>
+                <div class="tier-option"><div class="tier-boxes"><input type="checkbox" id="lvl4_cb_sub1"></div><label class="cb-label" for="lvl4_cb_sub1">Prenez une carte de sous-classe améliorée. Rayez ensuite l'option de Multiclassage pour ce palier.</label></div>
+                <div class="tier-option"><div class="tier-boxes" style="flex-direction: column;"><input type="checkbox" id="lvl4_cb_comp1"><input type="checkbox" id="lvl4_cb_comp2"></div><label class="cb-label" style="display:flex; align-items:center;" for="lvl4_cb_comp1">Augmentez votre Compétence de +1.</label></div>
+                <div class="tier-option"><div class="tier-boxes" style="flex-direction: column;"><input type="checkbox" id="lvl4_cb_multi1"><input type="checkbox" id="lvl4_cb_multi2"></div><label class="cb-label" for="lvl4_cb_multi1">Multiclassage. Choisissez une classe supplémentaire pour votre personnage, puis rayez l'option inutilisée « Prenez une carte de sous-classe améliorée » et l'autre option de Multiclassage de cette fiche.</label></div>
+                
+                <div class="tier-footer">Mettez à jour votre niveau et ajustez vos seuils de dégâts en conséquence. Prenez une carte de domaine supplémentaire de votre niveau ou de niveau inférieur dans un domaine auquel vous avez accès.</div>
+            </div>
+        </div>
+    </details>
+
 </div>
 
 <script>
     // --- INITIALISATION DES DONNÉES COMPLEXES ---
-    let formsData = {
-        form1: { name: "", img: "" }, form2: { name: "", img: "" },
-        form3: { name: "", img: "" }, form4: { name: "", img: "" },
-        form5: { name: "", img: "" }, form6: { name: "", img: "" }
-    };
-
-    let prayerDiceData = []; // Tableau contenant l'état des dés du Séraphin
+	let formsData = {
+		form1: { name: "Ami Domestique", img: "" }, 
+		form2: { name: "Brouteur Agile", img: "" },
+		form3: { name: "Eclaireur agile", img: "" }, 
+		form4: { name: "Eclaireur aquatique", img: "" },
+		form5: { name: "Prédateur de Meute", img: "" }, 
+		form6: { name: "Traqueur Arachnide", img: "" },
+		form7: { name: "Sentinelle Blindée", img: "" }, 
+		form8: { name: "Grand Marcheur", img: "" },
+		form9: { name: "Prédateur Bondissant", img: "" }, 
+		form10: { name: "Bête ailée", img: "" },
+		form11: { name: "Bête puissante", img: "" }, 
+		form12: { name: "Serpent frappeur", img: "" }
+	};
+    let prayerDiceData = [];
 
     // --- GESTION DU THÈME ---
     function changeTheme() {
@@ -463,9 +502,7 @@
     // --- FONCTION GLOBALE POUR +/- DES JAUGES ---
     function modifyValue(id, delta) {
         const input = document.getElementById(id);
-        if (input) {
-            input.value = parseInt(input.value || 0) + delta;
-        }
+        if (input) { input.value = parseInt(input.value || 0) + delta; }
     }
 
     // --- GESTION DES IMAGES ---
@@ -512,13 +549,8 @@
     function rollPrayerDice() {
         const traitValue = parseInt(document.getElementById('seraphinTrait').value || 0);
         prayerDiceData = [];
-        
-        // Génère X dés d4 selon l'aptitude
         for (let i = 0; i < traitValue; i++) {
-            prayerDiceData.push({ 
-                value: Math.floor(Math.random() * 4) + 1, // d4
-                used: false 
-            });
+            prayerDiceData.push({ value: Math.floor(Math.random() * 4) + 1, used: false });
         }
         renderPrayerDice();
     }
@@ -533,7 +565,6 @@
     function renderPrayerDice() {
         const container = document.getElementById('prayerDiceContainer');
         container.innerHTML = '';
-        
         prayerDiceData.forEach((die, index) => {
             const dieDiv = document.createElement('div');
             dieDiv.className = 'prayer-die' + (die.used ? ' used' : '');
@@ -553,7 +584,19 @@
         "classCardName", "ancestryCardName", "communityCardName", "originCardName", 
         "wpn1Name", "wpn2Name", "armorName", 
         "card1Name", "card2Name", "card3Name", "card4Name", "card5Name", 
-        "invSlots", "invGold", "adventureNotes", "activeAnimalForm", "seraphinTrait"
+        "invSlots", "invGold", "adventureNotes", "activeAnimalForm", "seraphinTrait",
+        
+        // Cases à cocher Palier 2
+        "lvl2_cb_trait1", "lvl2_cb_trait2", "lvl2_cb_trait3", "lvl2_cb_hp1", "lvl2_cb_hp2", "lvl2_cb_str1", "lvl2_cb_str2", "lvl2_cb_exp1", "lvl2_cb_exp2", "lvl2_cb_dom1", "lvl2_cb_esq1",
+        "lvl2_trait_agi", "lvl2_trait_fin", "lvl2_trait_ins", "lvl2_trait_pre", "lvl2_trait_kno", "lvl2_trait_str",
+        
+        // Cases à cocher Palier 3
+        "lvl3_cb_trait1", "lvl3_cb_trait2", "lvl3_cb_trait3", "lvl3_cb_hp1", "lvl3_cb_hp2", "lvl3_cb_str1", "lvl3_cb_str2", "lvl3_cb_exp1", "lvl3_cb_dom1", "lvl3_cb_esq1", "lvl3_cb_sub1", "lvl3_cb_comp1", "lvl3_cb_comp2", "lvl3_cb_multi1", "lvl3_cb_multi2",
+        "lvl3_trait_agi", "lvl3_trait_fin", "lvl3_trait_ins", "lvl3_trait_pre", "lvl3_trait_kno", "lvl3_trait_str",
+        
+        // Cases à cocher Palier 4
+        "lvl4_cb_trait1", "lvl4_cb_trait2", "lvl4_cb_trait3", "lvl4_cb_hp1", "lvl4_cb_hp2", "lvl4_cb_str1", "lvl4_cb_str2", "lvl4_cb_exp1", "lvl4_cb_dom1", "lvl4_cb_esq1", "lvl4_cb_sub1", "lvl4_cb_comp1", "lvl4_cb_comp2", "lvl4_cb_multi1", "lvl4_cb_multi2",
+        "lvl4_trait_agi", "lvl4_trait_fin", "lvl4_trait_ins", "lvl4_trait_pre", "lvl4_trait_kno", "lvl4_trait_str"
     ];
     
     const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgActiveForm", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
@@ -572,7 +615,6 @@
             if(img && img.src.startsWith('data:image')) data[id] = img.src; 
         });
         
-        // Ajout des données complexes (Druide et Séraphin)
         data.formsData = formsData;
         data.prayerDiceData = prayerDiceData;
 
@@ -593,11 +635,9 @@
             try {
                 const data = JSON.parse(e.target.result);
                 
-                // Données complexes
                 formsData = data.formsData || formsData;
                 prayerDiceData = data.prayerDiceData || [];
                 
-                // Champs de texte
                 textFields.forEach(id => { 
                     const el = document.getElementById(id); 
                     if(data[id] !== undefined && el) {
@@ -606,16 +646,11 @@
                     } 
                 });
                 
-                // Images
                 imageIds.forEach(id => { 
                     const img = document.getElementById(id); 
-                    if(data[id] && img) { 
-                        img.src = data[id]; 
-                        img.style.display = 'block'; 
-                    } 
+                    if(data[id] && img) { img.src = data[id]; img.style.display = 'block'; } 
                 });
                 
-                // Mise à jour de l'affichage
                 changeTheme();
                 updateSelectedFormTitle();
                 renderPrayerDice();
@@ -627,7 +662,6 @@
         reader.readAsText(file);
     }
 
-    // Lancement initial
     window.onload = function() {
         changeTheme();
         renderPrayerDice();
