@@ -481,16 +481,16 @@
 	let formsData = {
 		form1: { name: "Ami Domestique", img: "" }, 
 		form2: { name: "Brouteur Agile", img: "" },
-		form3: { name: "Eclaireur agile", img: "" }, 
-		form4: { name: "Eclaireur aquatique", img: "" },
+		form3: { name: "Eclaireur Agile", img: "" }, 
+		form4: { name: "Eclaireur Aquatique", img: "" },
 		form5: { name: "Prédateur de Meute", img: "" }, 
 		form6: { name: "Traqueur Arachnide", img: "" },
 		form7: { name: "Sentinelle Blindée", img: "" }, 
 		form8: { name: "Grand Marcheur", img: "" },
 		form9: { name: "Prédateur Bondissant", img: "" }, 
-		form10: { name: "Bête ailée", img: "" },
-		form11: { name: "Bête puissante", img: "" }, 
-		form12: { name: "Serpent frappeur", img: "" }
+		form10: { name: "Bête Ailée", img: "" },
+		form11: { name: "Bête Puissante", img: "" }, 
+		form12: { name: "Serpent Frappeur", img: "" }
 	};
     let prayerDiceData = [];
 
@@ -599,68 +599,75 @@
         "lvl4_trait_agi", "lvl4_trait_fin", "lvl4_trait_ins", "lvl4_trait_pre", "lvl4_trait_kno", "lvl4_trait_str"
     ];
     
-    const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgActiveForm", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
+	const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgActiveForm", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
+	
+	function exportCharacter() {
+	    saveCurrentForm(); // Très important : on enregistre l'état de la forme actuelle dans formsData
+	    const data = {};
+	    
+	    textFields.forEach(id => { 
+	        const el = document.getElementById(id); 
+	        if(el) data[id] = (el.type === "checkbox") ? el.checked : el.value; 
+	    });
+	    
+	    imageIds.forEach(id => { 
+	        const img = document.getElementById(id); 
+	        if(img && img.src.startsWith('data:image')) data[id] = img.src; 
+	    });
+	    
+	    // On sauvegarde tout l'objet formsData
+	    data.formsData = formsData; 
+	    data.prayerDiceData = prayerDiceData;
+	
+	    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+	    const url = URL.createObjectURL(blob);
+	    const a = document.createElement('a');
+	    a.href = url;
+	    a.download = (document.getElementById("charName").value || "Perso") + ".json";
+	    a.click();
+	}
 
-    function exportCharacter() {
-        saveCurrentForm();
-        const data = {};
-        
-        textFields.forEach(id => { 
-            const el = document.getElementById(id); 
-            if(el) data[id] = (el.type === "checkbox") ? el.checked : el.value; 
-        });
-        
-        imageIds.forEach(id => { 
-            const img = document.getElementById(id); 
-            if(img && img.src.startsWith('data:image')) data[id] = img.src; 
-        });
-        
-        data.formsData = formsData;
-        data.prayerDiceData = prayerDiceData;
-
-        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = (document.getElementById("charName").value || "Perso") + ".json";
-        a.click();
-    }
-
-    function importCharacter(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                
-                formsData = data.formsData || formsData;
-                prayerDiceData = data.prayerDiceData || [];
-                
-                textFields.forEach(id => { 
-                    const el = document.getElementById(id); 
-                    if(data[id] !== undefined && el) {
-                        if (el.type === "checkbox") el.checked = data[id];
-                        else el.value = data[id]; 
-                    } 
-                });
-                
-                imageIds.forEach(id => { 
-                    const img = document.getElementById(id); 
-                    if(data[id] && img) { img.src = data[id]; img.style.display = 'block'; } 
-                });
-                
-                changeTheme();
-                updateSelectedFormTitle();
-                renderPrayerDice();
-                
-            } catch(err) {
-                alert("Erreur lors de la lecture du fichier de sauvegarde.");
-            }
-        };
-        reader.readAsText(file);
-    }
+	    function importCharacter(event) {
+	    const file = event.target.files[0];
+	    if (!file) return;
+	    const reader = new FileReader();
+	    
+	    reader.onload = function(e) {
+	        try {
+	            const data = JSON.parse(e.target.result);
+	            
+	            // 1. Chargement des données des 12 formes
+	            if (data.formsData) {
+	                formsData = data.formsData;
+	            }
+	            prayerDiceData = data.prayerDiceData || [];
+	            
+	            // 2. Chargement des champs simples
+	            textFields.forEach(id => { 
+	                const el = document.getElementById(id); 
+	                if(data[id] !== undefined && el) {
+	                    if (el.type === "checkbox") el.checked = data[id];
+	                    else el.value = data[id]; 
+	                } 
+	            });
+	            
+	            // 3. Chargement des images statiques
+	            imageIds.forEach(id => { 
+	                const img = document.getElementById(id); 
+	                if(data[id] && img) { img.src = data[id]; img.style.display = 'block'; } 
+	            });
+	            
+	            // 4. MISE À JOUR FINALE
+	            changeTheme();
+	            updateSelectedFormTitle(); // Affiche la forme active sauvegardée
+	            renderPrayerDice();
+	            
+	        } catch(err) {
+	            alert("Erreur lors de la lecture du fichier.");
+	        }
+	    };
+	    reader.readAsText(file);
+	}
 
     window.onload = function() {
         changeTheme();
