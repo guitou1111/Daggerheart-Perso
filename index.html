@@ -478,24 +478,15 @@
 
 	
 <script>
-	
-	let currentFormId = 'none'; // Variable pour mémoriser quelle forme est en cours d'édition
-	
-    // --- INITIALISATION DES DONNÉES COMPLEXES ---
-	let formsData = {
-		form1: { name: "Ami Domestique", img: "" }, 
-		form2: { name: "Brouteur Agile", img: "" },
-		form3: { name: "Eclaireur Agile", img: "" }, 
-		form4: { name: "Eclaireur Aquatique", img: "" },
-		form5: { name: "Prédateur de Meute", img: "" }, 
-		form6: { name: "Traqueur Arachnide", img: "" },
-		form7: { name: "Sentinelle Blindée", img: "" }, 
-		form8: { name: "Grand Marcheur", img: "" },
-		form9: { name: "Prédateur Bondissant", img: "" }, 
-		form10: { name: "Bête Ailée", img: "" },
-		form11: { name: "Bête Puissante", img: "" }, 
-		form12: { name: "Serpent Frappeur", img: "" }
-	};
+    // --- INITIALISATION DES DONNÉES ---
+    let formsData = {
+        form1: { name: "Ami Domestique", img: "" }, form2: { name: "Brouteur Agile", img: "" },
+        form3: { name: "Eclaireur Agile", img: "" }, form4: { name: "Eclaireur Aquatique", img: "" },
+        form5: { name: "Prédateur de Meute", img: "" }, form6: { name: "Traqueur Arachnide", img: "" },
+        form7: { name: "Sentinelle Blindée", img: "" }, form8: { name: "Grand Marcheur", img: "" },
+        form9: { name: "Prédateur Bondissant", img: "" }, form10: { name: "Bête Ailée", img: "" },
+        form11: { name: "Bête Puissante", img: "" }, form12: { name: "Serpent Frappeur", img: "" }
+    };
     let prayerDiceData = [];
 
     // --- GESTION DU THÈME ---
@@ -518,47 +509,39 @@
                 const imgTag = document.getElementById(imgId);
                 imgTag.src = e.target.result;
                 imgTag.style.display = 'block';
-                saveCurrentForm();
+                saveCurrentForm(); // Sauvegarde immédiate
             }
             reader.readAsDataURL(file);
         }
     }
 
-    // --- GESTION DRUIDE ---
-	function saveCurrentForm() {
-	    if (currentFormId !== "none") {
-	        formsData[currentFormId].name = document.getElementById('activeFormName').value;
-	        formsData[currentFormId].img = document.getElementById('imgActiveForm').src;
-	    }
-	}
+    // --- GESTION FORME ANIMALE ---
+    function saveCurrentForm() {
+        const activeId = document.getElementById('activeAnimalForm').value;
+        if (activeId !== "none") {
+            formsData[activeId].name = document.getElementById('activeFormName').value;
+            formsData[activeId].img = document.getElementById('imgActiveForm').src;
+        }
+    }
 
-	function updateSelectedFormTitle() {
-	    // 1. D'abord, on sauvegarde la forme qu'on vient de quitter (currentFormId)
-	    saveCurrentForm();
-	
-	    // 2. On récupère la nouvelle sélection
-	    const select = document.getElementById('activeAnimalForm');
-	    const container = document.getElementById('animalFormsContainer');
-	    const newFormId = select.value;
-	    
-	    // 3. On met à jour notre variable de suivi
-	    currentFormId = newFormId;
-	    
-	    // 4. On affiche les données de la nouvelle forme
-	    if (newFormId === "none") {
-	        container.style.display = 'none';
-	        document.getElementById('activeFormName').value = "";
-	        document.getElementById('imgActiveForm').src = "";
-	    } else {
-	        container.style.display = 'block';
-	        document.getElementById('activeFormName').value = formsData[newFormId].name || "";
-	        const img = document.getElementById('imgActiveForm');
-	        img.src = formsData[newFormId].img || "";
-	        img.style.display = formsData[newFormId].img ? 'block' : 'none';
-	    }
-	}
+    function updateSelectedFormTitle() {
+        saveCurrentForm(); // Sauvegarde l'ancienne avant de changer
+        const select = document.getElementById('activeAnimalForm');
+        const container = document.getElementById('animalFormsContainer');
+        const formId = select.value;
+        
+        if (formId === "none") {
+            container.style.display = 'none';
+        } else {
+            container.style.display = 'block';
+            document.getElementById('activeFormName').value = formsData[formId].name || "";
+            const img = document.getElementById('imgActiveForm');
+            img.src = formsData[formId].img || "";
+            img.style.display = (formsData[formId].img && formsData[formId].img !== "") ? 'block' : 'none';
+        }
+    }
 
-    // --- GESTION SÉRAPHIN (Dés de Prières) ---
+    // --- GESTION SÉRAPHIN ---
     function rollPrayerDice() {
         const traitValue = parseInt(document.getElementById('seraphinTrait').value || 0);
         prayerDiceData = [];
@@ -589,98 +572,82 @@
 
     // --- EXPORT / IMPORT ---
     const textFields = [
-        "themeSelect", "charName", "charPronouns", "charLevel", 
-        "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr", 
-        "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", 
-        "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds", 
+        "themeSelect", "charName", "charPronouns", "charLevel", "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr", 
+        "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds", 
         "exp1Name", "exp1Val", "exp1Desc", "exp2Name", "exp2Val", "exp2Desc", "exp3Name", "exp3Val", "exp3Desc", 
-        "classCardName", "ancestryCardName", "communityCardName", "originCardName", 
-        "wpn1Name", "wpn2Name", "armorName", 
-        "card1Name", "card2Name", "card3Name", "card4Name", "card5Name", 
-        "invSlots", "invGold", "adventureNotes", "activeAnimalForm", "seraphinTrait",
-        
-        // Cases à cocher Palier 2
-        "lvl2_cb_trait1", "lvl2_cb_trait2", "lvl2_cb_trait3", "lvl2_cb_hp1", "lvl2_cb_hp2", "lvl2_cb_str1", "lvl2_cb_str2", "lvl2_cb_exp1", "lvl2_cb_exp2", "lvl2_cb_dom1", "lvl2_cb_esq1",
-        "lvl2_trait_agi", "lvl2_trait_fin", "lvl2_trait_ins", "lvl2_trait_pre", "lvl2_trait_kno", "lvl2_trait_str",
-        
-        // Cases à cocher Palier 3
-        "lvl3_cb_trait1", "lvl3_cb_trait2", "lvl3_cb_trait3", "lvl3_cb_hp1", "lvl3_cb_hp2", "lvl3_cb_str1", "lvl3_cb_str2", "lvl3_cb_exp1", "lvl3_cb_dom1", "lvl3_cb_esq1", "lvl3_cb_sub1", "lvl3_cb_comp1", "lvl3_cb_comp2", "lvl3_cb_multi1", "lvl3_cb_multi2",
-        "lvl3_trait_agi", "lvl3_trait_fin", "lvl3_trait_ins", "lvl3_trait_pre", "lvl3_trait_kno", "lvl3_trait_str",
-        
-        // Cases à cocher Palier 4
-        "lvl4_cb_trait1", "lvl4_cb_trait2", "lvl4_cb_trait3", "lvl4_cb_hp1", "lvl4_cb_hp2", "lvl4_cb_str1", "lvl4_cb_str2", "lvl4_cb_exp1", "lvl4_cb_dom1", "lvl4_cb_esq1", "lvl4_cb_sub1", "lvl4_cb_comp1", "lvl4_cb_comp2", "lvl4_cb_multi1", "lvl4_cb_multi2",
-        "lvl4_trait_agi", "lvl4_trait_fin", "lvl4_trait_ins", "lvl4_trait_pre", "lvl4_trait_kno", "lvl4_trait_str"
+        "classCardName", "ancestryCardName", "communityCardName", "originCardName", "wpn1Name", "wpn2Name", "armorName", 
+        "card1Name", "card2Name", "card3Name", "card4Name", "card5Name", "invSlots", "invGold", "adventureNotes", "activeAnimalForm", "seraphinTrait",
+        "lvl2_cb_trait1", "lvl2_cb_trait2", "lvl2_cb_trait3", "lvl2_cb_hp1", "lvl2_cb_hp2", "lvl2_cb_str1", "lvl2_cb_str2", "lvl2_cb_exp1", "lvl2_cb_exp2", "lvl2_cb_dom1", "lvl2_cb_esq1", "lvl2_trait_agi", "lvl2_trait_fin", "lvl2_trait_ins", "lvl2_trait_pre", "lvl2_trait_kno", "lvl2_trait_str",
+        "lvl3_cb_trait1", "lvl3_cb_trait2", "lvl3_cb_trait3", "lvl3_cb_hp1", "lvl3_cb_hp2", "lvl3_cb_str1", "lvl3_cb_str2", "lvl3_cb_exp1", "lvl3_cb_dom1", "lvl3_cb_esq1", "lvl3_cb_sub1", "lvl3_cb_comp1", "lvl3_cb_comp2", "lvl3_cb_multi1", "lvl3_cb_multi2", "lvl3_trait_agi", "lvl3_trait_fin", "lvl3_trait_ins", "lvl3_trait_pre", "lvl3_trait_kno", "lvl3_trait_str",
+        "lvl4_cb_trait1", "lvl4_cb_trait2", "lvl4_cb_trait3", "lvl4_cb_hp1", "lvl4_cb_hp2", "lvl4_cb_str1", "lvl4_cb_str2", "lvl4_cb_exp1", "lvl4_cb_dom1", "lvl4_cb_esq1", "lvl4_cb_sub1", "lvl4_cb_comp1", "lvl4_cb_comp2", "lvl4_cb_multi1", "lvl4_cb_multi2", "lvl4_trait_agi", "lvl4_trait_fin", "lvl4_trait_ins", "lvl4_trait_pre", "lvl4_trait_kno", "lvl4_trait_str"
     ];
     
-	const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgActiveForm", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
-	
-	function exportCharacter() {
-	    saveCurrentForm(); // Très important : on enregistre l'état de la forme actuelle dans formsData
-	    const data = {};
-	    
-	    textFields.forEach(id => { 
-	        const el = document.getElementById(id); 
-	        if(el) data[id] = (el.type === "checkbox") ? el.checked : el.value; 
-	    });
-	    
-	    imageIds.forEach(id => { 
-	        const img = document.getElementById(id); 
-	        if(img && img.src.startsWith('data:image')) data[id] = img.src; 
-	    });
-	    
-	    // On sauvegarde tout l'objet formsData
-	    data.formsData = formsData; 
-	    data.prayerDiceData = prayerDiceData;
-	
-	    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-	    const url = URL.createObjectURL(blob);
-	    const a = document.createElement('a');
-	    a.href = url;
-	    a.download = (document.getElementById("charName").value || "Perso") + ".json";
-	    a.click();
-	}
+    // Note: imgActiveForm est retiré de cette liste car il est géré par formsData
+    const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
 
-	    function importCharacter(event) {
-	    const file = event.target.files[0];
-	    if (!file) return;
-	    const reader = new FileReader();
-	    
-	    reader.onload = function(e) {
-	        try {
-	            const data = JSON.parse(e.target.result);
-	            
-	            // 1. Chargement des données des 12 formes
-	            if (data.formsData) {
-	                formsData = data.formsData;
-	            }
-	            prayerDiceData = data.prayerDiceData || [];
-	            
-	            // 2. Chargement des champs simples
-	            textFields.forEach(id => { 
-	                const el = document.getElementById(id); 
-	                if(data[id] !== undefined && el) {
-	                    if (el.type === "checkbox") el.checked = data[id];
-	                    else el.value = data[id]; 
-	                } 
-	            });
-	            
-	            // 3. Chargement des images statiques
-	            imageIds.forEach(id => { 
-	                const img = document.getElementById(id); 
-	                if(data[id] && img) { img.src = data[id]; img.style.display = 'block'; } 
-	            });
-	            
-	            // 4. MISE À JOUR FINALE
-	            changeTheme();
-	            updateSelectedFormTitle(); // Affiche la forme active sauvegardée
-	            renderPrayerDice();
-	            
-	        } catch(err) {
-	            alert("Erreur lors de la lecture du fichier.");
-	        }
-	    };
-	    reader.readAsText(file);
-	}
+    function exportCharacter() {
+        try {
+            saveCurrentForm();
+            const data = {};
+            
+            textFields.forEach(id => { 
+                const el = document.getElementById(id); 
+                if(el) data[id] = (el.type === "checkbox") ? el.checked : el.value; 
+            });
+            
+            imageIds.forEach(id => { 
+                const img = document.getElementById(id); 
+                if(img && img.src.startsWith('data:image')) data[id] = img.src; 
+            });
+            
+            data.formsData = formsData;
+            data.prayerDiceData = prayerDiceData;
+
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = (document.getElementById("charName").value || "Perso_Daggerheart") + ".json";
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch(err) {
+            alert("Erreur lors de l'export : " + err.message);
+        }
+    }
+
+    function importCharacter(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                formsData = data.formsData || formsData;
+                prayerDiceData = data.prayerDiceData || [];
+                
+                textFields.forEach(id => { 
+                    const el = document.getElementById(id); 
+                    if(data[id] !== undefined && el) {
+                        if (el.type === "checkbox") el.checked = data[id];
+                        else el.value = data[id]; 
+                    } 
+                });
+                
+                imageIds.forEach(id => { 
+                    const img = document.getElementById(id); 
+                    if(data[id] && img) { img.src = data[id]; img.style.display = 'block'; } 
+                });
+                
+                changeTheme();
+                updateSelectedFormTitle();
+                renderPrayerDice();
+            } catch(err) {
+                alert("Erreur lors de l'import : le fichier est peut-être corrompu.");
+            }
+        };
+        reader.readAsText(file);
+    }
 
     window.onload = function() {
         changeTheme();
