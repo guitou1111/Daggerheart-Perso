@@ -299,8 +299,8 @@
 						<optgroup label="Palier 1 (T1)">
 							<option value="form1">T1 - Ami Domestique</option>
 							<option value="form2">T1 - Brouteur Agile</option>
-							<option value="form3">T1 - Eclaireur agile</option>
-							<option value="form4">T1 - Eclaireur aquatique</option>
+							<option value="form3">T1 - Eclaireur Agile</option>
+							<option value="form4">T1 - Eclaireur Aquatique</option>
 							<option value="form5">T1 - Prédateur de Meute</option>
 							<option value="form6">T1 - Traqueur Arachnide</option>
 						</optgroup>
@@ -308,9 +308,9 @@
 							<option value="form7">T2 - Sentinelle Blindée</option>
 							<option value="form8">T2 - Grand Marcheur</option>
 							<option value="form9">T2 - Prédateur Bondissant</option>
-							<option value="form10">T2 - Bête ailée</option>
-							<option value="form11">T2 - Bête puissante</option>
-							<option value="form12">T2 - Serpent frappeur</option>
+							<option value="form10">T2 - Bête Ailée</option>
+							<option value="form11">T2 - Bête Puissante</option>
+							<option value="form12">T2 - Serpent Frappeur</option>
 						</optgroup>
 					</select>
                 </div>
@@ -476,17 +476,22 @@
 
 </div>
 
-	
 <script>
-    // --- INITIALISATION DES DONNÉES ---
-    let formsData = {
-        form1: { name: "Ami Domestique", img: "" }, form2: { name: "Brouteur Agile", img: "" },
-        form3: { name: "Eclaireur Agile", img: "" }, form4: { name: "Eclaireur Aquatique", img: "" },
-        form5: { name: "Prédateur de Meute", img: "" }, form6: { name: "Traqueur Arachnide", img: "" },
-        form7: { name: "Sentinelle Blindée", img: "" }, form8: { name: "Grand Marcheur", img: "" },
-        form9: { name: "Prédateur Bondissant", img: "" }, form10: { name: "Bête Ailée", img: "" },
-        form11: { name: "Bête Puissante", img: "" }, form12: { name: "Serpent Frappeur", img: "" }
-    };
+    // --- INITIALISATION DES DONNÉES COMPLEXES ---
+	let formsData = {
+		form1: { name: "Ami Domestique", img: "" }, 
+		form2: { name: "Brouteur Agile", img: "" },
+		form3: { name: "Eclaireur Agile", img: "" }, 
+		form4: { name: "Eclaireur Aquatique", img: "" },
+		form5: { name: "Prédateur de Meute", img: "" }, 
+		form6: { name: "Traqueur Arachnide", img: "" },
+		form7: { name: "Sentinelle Blindée", img: "" }, 
+		form8: { name: "Grand Marcheur", img: "" },
+		form9: { name: "Prédateur Bondissant", img: "" }, 
+		form10: { name: "Bête Ailée", img: "" },
+		form11: { name: "Bête Puissante", img: "" }, 
+		form12: { name: "Serpent Frappeur", img: "" }
+	};
     let prayerDiceData = [];
 
     // --- GESTION DU THÈME ---
@@ -509,23 +514,31 @@
                 const imgTag = document.getElementById(imgId);
                 imgTag.src = e.target.result;
                 imgTag.style.display = 'block';
-                saveCurrentForm(); // Sauvegarde immédiate
+                saveCurrentForm();
             }
             reader.readAsDataURL(file);
         }
     }
 
-    // --- GESTION FORME ANIMALE ---
-    function saveCurrentForm() {
-        const activeId = document.getElementById('activeAnimalForm').value;
-        if (activeId !== "none") {
-            formsData[activeId].name = document.getElementById('activeFormName').value;
-            formsData[activeId].img = document.getElementById('imgActiveForm').src;
-        }
-    }
+    // --- GESTION DRUIDE ---
+	  function saveCurrentForm() {
+		const activeId = document.getElementById('activeAnimalForm').value;
+		// On vérifie que activeId n'est pas "none" ET que la forme existe bien dans formsData
+		if (activeId !== "none") {
+			// Initialisation défensive au cas où la clé serait absente
+			if (!formsData[activeId]) {
+				formsData[activeId] = { name: "", img: "" };
+			}
+			
+			const nameInput = document.getElementById('activeFormName');
+			const imgInput = document.getElementById('imgActiveForm');
+			
+			if (nameInput) formsData[activeId].name = nameInput.value;
+			if (imgInput) formsData[activeId].img = imgInput.src;
+		}
+	}
 
     function updateSelectedFormTitle() {
-        saveCurrentForm(); // Sauvegarde l'ancienne avant de changer
         const select = document.getElementById('activeAnimalForm');
         const container = document.getElementById('animalFormsContainer');
         const formId = select.value;
@@ -537,11 +550,11 @@
             document.getElementById('activeFormName').value = formsData[formId].name || "";
             const img = document.getElementById('imgActiveForm');
             img.src = formsData[formId].img || "";
-            img.style.display = (formsData[formId].img && formsData[formId].img !== "") ? 'block' : 'none';
+            img.style.display = formsData[formId].img ? 'block' : 'none';
         }
     }
 
-    // --- GESTION SÉRAPHIN ---
+    // --- GESTION SÉRAPHIN (Dés de Prières) ---
     function rollPrayerDice() {
         const traitValue = parseInt(document.getElementById('seraphinTrait').value || 0);
         prayerDiceData = [];
@@ -572,47 +585,54 @@
 
     // --- EXPORT / IMPORT ---
     const textFields = [
-        "themeSelect", "charName", "charPronouns", "charLevel", "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr", 
-        "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds", 
+        "themeSelect", "charName", "charPronouns", "charLevel", 
+        "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr", 
+        "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", 
+        "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds", 
         "exp1Name", "exp1Val", "exp1Desc", "exp2Name", "exp2Val", "exp2Desc", "exp3Name", "exp3Val", "exp3Desc", 
-        "classCardName", "ancestryCardName", "communityCardName", "originCardName", "wpn1Name", "wpn2Name", "armorName", 
-        "card1Name", "card2Name", "card3Name", "card4Name", "card5Name", "invSlots", "invGold", "adventureNotes", "activeAnimalForm", "seraphinTrait",
-        "lvl2_cb_trait1", "lvl2_cb_trait2", "lvl2_cb_trait3", "lvl2_cb_hp1", "lvl2_cb_hp2", "lvl2_cb_str1", "lvl2_cb_str2", "lvl2_cb_exp1", "lvl2_cb_exp2", "lvl2_cb_dom1", "lvl2_cb_esq1", "lvl2_trait_agi", "lvl2_trait_fin", "lvl2_trait_ins", "lvl2_trait_pre", "lvl2_trait_kno", "lvl2_trait_str",
-        "lvl3_cb_trait1", "lvl3_cb_trait2", "lvl3_cb_trait3", "lvl3_cb_hp1", "lvl3_cb_hp2", "lvl3_cb_str1", "lvl3_cb_str2", "lvl3_cb_exp1", "lvl3_cb_dom1", "lvl3_cb_esq1", "lvl3_cb_sub1", "lvl3_cb_comp1", "lvl3_cb_comp2", "lvl3_cb_multi1", "lvl3_cb_multi2", "lvl3_trait_agi", "lvl3_trait_fin", "lvl3_trait_ins", "lvl3_trait_pre", "lvl3_trait_kno", "lvl3_trait_str",
-        "lvl4_cb_trait1", "lvl4_cb_trait2", "lvl4_cb_trait3", "lvl4_cb_hp1", "lvl4_cb_hp2", "lvl4_cb_str1", "lvl4_cb_str2", "lvl4_cb_exp1", "lvl4_cb_dom1", "lvl4_cb_esq1", "lvl4_cb_sub1", "lvl4_cb_comp1", "lvl4_cb_comp2", "lvl4_cb_multi1", "lvl4_cb_multi2", "lvl4_trait_agi", "lvl4_trait_fin", "lvl4_trait_ins", "lvl4_trait_pre", "lvl4_trait_kno", "lvl4_trait_str"
+        "classCardName", "ancestryCardName", "communityCardName", "originCardName", 
+        "wpn1Name", "wpn2Name", "armorName", 
+        "card1Name", "card2Name", "card3Name", "card4Name", "card5Name", 
+        "invSlots", "invGold", "adventureNotes", "activeAnimalForm", "seraphinTrait",
+        
+        // Cases à cocher Palier 2
+        "lvl2_cb_trait1", "lvl2_cb_trait2", "lvl2_cb_trait3", "lvl2_cb_hp1", "lvl2_cb_hp2", "lvl2_cb_str1", "lvl2_cb_str2", "lvl2_cb_exp1", "lvl2_cb_exp2", "lvl2_cb_dom1", "lvl2_cb_esq1",
+        "lvl2_trait_agi", "lvl2_trait_fin", "lvl2_trait_ins", "lvl2_trait_pre", "lvl2_trait_kno", "lvl2_trait_str",
+        
+        // Cases à cocher Palier 3
+        "lvl3_cb_trait1", "lvl3_cb_trait2", "lvl3_cb_trait3", "lvl3_cb_hp1", "lvl3_cb_hp2", "lvl3_cb_str1", "lvl3_cb_str2", "lvl3_cb_exp1", "lvl3_cb_dom1", "lvl3_cb_esq1", "lvl3_cb_sub1", "lvl3_cb_comp1", "lvl3_cb_comp2", "lvl3_cb_multi1", "lvl3_cb_multi2",
+        "lvl3_trait_agi", "lvl3_trait_fin", "lvl3_trait_ins", "lvl3_trait_pre", "lvl3_trait_kno", "lvl3_trait_str",
+        
+        // Cases à cocher Palier 4
+        "lvl4_cb_trait1", "lvl4_cb_trait2", "lvl4_cb_trait3", "lvl4_cb_hp1", "lvl4_cb_hp2", "lvl4_cb_str1", "lvl4_cb_str2", "lvl4_cb_exp1", "lvl4_cb_dom1", "lvl4_cb_esq1", "lvl4_cb_sub1", "lvl4_cb_comp1", "lvl4_cb_comp2", "lvl4_cb_multi1", "lvl4_cb_multi2",
+        "lvl4_trait_agi", "lvl4_trait_fin", "lvl4_trait_ins", "lvl4_trait_pre", "lvl4_trait_kno", "lvl4_trait_str"
     ];
     
-    // Note: imgActiveForm est retiré de cette liste car il est géré par formsData
     const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
 
     function exportCharacter() {
-        try {
-            saveCurrentForm();
-            const data = {};
-            
-            textFields.forEach(id => { 
-                const el = document.getElementById(id); 
-                if(el) data[id] = (el.type === "checkbox") ? el.checked : el.value; 
-            });
-            
-            imageIds.forEach(id => { 
-                const img = document.getElementById(id); 
-                if(img && img.src.startsWith('data:image')) data[id] = img.src; 
-            });
-            
-            data.formsData = formsData;
-            data.prayerDiceData = prayerDiceData;
+        saveCurrentForm();
+        const data = {};
+        
+        textFields.forEach(id => { 
+            const el = document.getElementById(id); 
+            if(el) data[id] = (el.type === "checkbox") ? el.checked : el.value; 
+        });
+        
+        imageIds.forEach(id => { 
+            const img = document.getElementById(id); 
+            if(img && img.src.startsWith('data:image')) data[id] = img.src; 
+        });
+        
+        data.formsData = formsData;
+        data.prayerDiceData = prayerDiceData;
 
-            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = (document.getElementById("charName").value || "Perso_Daggerheart") + ".json";
-            a.click();
-            URL.revokeObjectURL(url);
-        } catch(err) {
-            alert("Erreur lors de l'export : " + err.message);
-        }
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = (document.getElementById("charName").value || "Perso") + ".json";
+        a.click();
     }
 
     function importCharacter(event) {
@@ -623,6 +643,7 @@
         reader.onload = function(e) {
             try {
                 const data = JSON.parse(e.target.result);
+                
                 formsData = data.formsData || formsData;
                 prayerDiceData = data.prayerDiceData || [];
                 
@@ -642,8 +663,9 @@
                 changeTheme();
                 updateSelectedFormTitle();
                 renderPrayerDice();
+                
             } catch(err) {
-                alert("Erreur lors de l'import : le fichier est peut-être corrompu.");
+                alert("Erreur lors de la lecture du fichier de sauvegarde.");
             }
         };
         reader.readAsText(file);
