@@ -476,7 +476,11 @@
 
 </div>
 
+	
 <script>
+	
+	let currentFormId = 'none'; // Variable pour mémoriser quelle forme est en cours d'édition
+	
     // --- INITIALISATION DES DONNÉES COMPLEXES ---
 	let formsData = {
 		form1: { name: "Ami Domestique", img: "" }, 
@@ -521,29 +525,38 @@
     }
 
     // --- GESTION DRUIDE ---
-    function saveCurrentForm() {
-        const activeId = document.getElementById('activeAnimalForm').value;
-        if (activeId !== "none") {
-            formsData[activeId].name = document.getElementById('activeFormName').value;
-            formsData[activeId].img = document.getElementById('imgActiveForm').src;
-        }
-    }
+	function saveCurrentForm() {
+	    if (currentFormId !== "none") {
+	        formsData[currentFormId].name = document.getElementById('activeFormName').value;
+	        formsData[currentFormId].img = document.getElementById('imgActiveForm').src;
+	    }
+	}
 
-    function updateSelectedFormTitle() {
-        const select = document.getElementById('activeAnimalForm');
-        const container = document.getElementById('animalFormsContainer');
-        const formId = select.value;
-        
-        if (formId === "none") {
-            container.style.display = 'none';
-        } else {
-            container.style.display = 'block';
-            document.getElementById('activeFormName').value = formsData[formId].name || "";
-            const img = document.getElementById('imgActiveForm');
-            img.src = formsData[formId].img || "";
-            img.style.display = formsData[formId].img ? 'block' : 'none';
-        }
-    }
+	function updateSelectedFormTitle() {
+	    // 1. D'abord, on sauvegarde la forme qu'on vient de quitter (currentFormId)
+	    saveCurrentForm();
+	
+	    // 2. On récupère la nouvelle sélection
+	    const select = document.getElementById('activeAnimalForm');
+	    const container = document.getElementById('animalFormsContainer');
+	    const newFormId = select.value;
+	    
+	    // 3. On met à jour notre variable de suivi
+	    currentFormId = newFormId;
+	    
+	    // 4. On affiche les données de la nouvelle forme
+	    if (newFormId === "none") {
+	        container.style.display = 'none';
+	        document.getElementById('activeFormName').value = "";
+	        document.getElementById('imgActiveForm').src = "";
+	    } else {
+	        container.style.display = 'block';
+	        document.getElementById('activeFormName').value = formsData[newFormId].name || "";
+	        const img = document.getElementById('imgActiveForm');
+	        img.src = formsData[newFormId].img || "";
+	        img.style.display = formsData[newFormId].img ? 'block' : 'none';
+	    }
+	}
 
     // --- GESTION SÉRAPHIN (Dés de Prières) ---
     function rollPrayerDice() {
