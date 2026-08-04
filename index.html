@@ -187,6 +187,10 @@
 
     <!-- PORTRAIT ET IDENTITÉ GRAND FORMAT -->
     <div class="grid-auto">
+		 <div class="section-panel" style="text-align: center; display: flex; flex-direction: column; justify-content: center; max-width: 150px; margin: 0 auto 10px auto;">
+            <img id="imgPortrait" class="portrait-img" src="">
+            <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgPortrait')">
+        </div>
 		<div class="section-panel" style="grid-column: span 2; display: flex; align-items: center;">
             <div style="display: grid; grid-template-columns: 3fr 1fr; width: 100%; gap: 15px;">
                 <div>
