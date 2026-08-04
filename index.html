@@ -187,16 +187,26 @@
 
     <!-- PORTRAIT ET IDENTITÉ GRAND FORMAT -->
     <div class="grid-auto">
-        <div class="section-panel" style="text-align: center; display: flex; flex-direction: column; justify-content: center; max-width: 150px; margin: 0 auto 10px auto;">
-            <img id="imgPortrait" class="portrait-img" src="">
-            <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgPortrait')">
-        </div>
-
-        <div class="section-panel" style="grid-column: span 2; display: flex; align-items: center;">
-            <div class="grid-auto" style="width: 100%; gap: 15px;">
-                <div><label class="label-large">Nom du Personnage</label><input type="text" id="charName" class="identity-large"></div>
-                <div><label class="label-large">Pronoms</label><input type="text" id="charPronouns" class="identity-large"></div>
-                <div><label class="label-large">Niveau</label><input type="number" id="charLevel" value="1" class="identity-large"></div>
+		<div class="section-panel" style="grid-column: span 2; display: flex; align-items: center;">
+            <div style="display: grid; grid-template-columns: 3fr 1fr; width: 100%; gap: 15px;">
+                <div>
+                    <label class="label-large">Nom du Personnage</label>
+                    <input type="text" id="charName" class="identity-large" style="margin-bottom: 10px;">
+                    
+                    <label class="label-large">Pronons</label>
+                    <input type="text" id="charPronouns" class="identity-large">
+                </div>
+                <div>
+                    <label class="label-large">Niveau</label>
+                    <input type="number" id="charLevel" value="1" class="identity-large" style="margin-bottom: 10px;">
+                    
+                    <label class="label-large">Compétence</label>
+                    <div class="stat-box" style="padding: 6px;">
+                        <button onclick="modifyValue('charCompetence', -1)" style="padding: 4px 10px; font-size: 1.1em;">-</button>
+                        <input type="number" id="charCompetence" value="1" style="font-size: 1.3em; width: 60px; text-align: center; border: none; background: transparent; color: var(--text-light);">
+                        <button onclick="modifyValue('charCompetence', 1)" style="padding: 4px 10px; font-size: 1.1em;">+</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -585,7 +595,7 @@
 
     // --- EXPORT / IMPORT ---
     const textFields = [
-        "themeSelect", "charName", "charPronouns", "charLevel", 
+        "themeSelect", "charName", "charPronouns", "charLevel", "charCompetence",
         "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr", 
         "valHPCurr", "valHPMax", "valStressCurr", "valStressMax", "valHopeCurr", "valHopeMax", 
         "valArmorCurr", "valArmorMax", "valEvasion", "valThresholds", 
