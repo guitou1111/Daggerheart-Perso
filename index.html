@@ -228,14 +228,6 @@
                 </div>
             </div>
             <div class="stat-box">
-                <label>Force</label>
-                <div class="gauge-compact">
-                    <button onclick="modifyValue('statStr', -1)">-</button>
-                    <input type="number" id="statStr" value="0">
-                    <button onclick="modifyValue('statStr', 1)">+</button>
-                </div>
-            </div>
-			<div class="stat-box">
                 <label>Finesse</label>
                 <div class="gauge-compact">
                     <button onclick="modifyValue('statFin', -1)">-</button>
@@ -265,6 +257,14 @@
                     <button onclick="modifyValue('statKno', -1)">-</button>
                     <input type="number" id="statKno" value="0">
                     <button onclick="modifyValue('statKno', 1)">+</button>
+                </div>
+            </div>
+            <div class="stat-box">
+                <label>Force</label>
+                <div class="gauge-compact">
+                    <button onclick="modifyValue('statStr', -1)">-</button>
+                    <input type="number" id="statStr" value="0">
+                    <button onclick="modifyValue('statStr', 1)">+</button>
                 </div>
             </div>
         </div>
@@ -371,7 +371,23 @@
         </div>
     </div>
 
-    <!-- INVENTAIRE -->
+    <!-- INVENTAIRES (Dépliable) -->
+    <details class="section-panel">
+        <summary style="cursor: pointer; font-size: 1.2em; font-weight: bold; color: var(--primary-gold); outline: none;">
+            🎒 Inventaire
+        </summary>
+        <div style="margin-top: 15px;">
+            <div class="grid-cards">
+                <div class="card"><input type="text" id="invCard1Name" class="card-title" placeholder="Objet 1"><img id="imgInvCard1" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard1')"></div>
+                <div class="card"><input type="text" id="invCard2Name" class="card-title" placeholder="Objet 2"><img id="imgInvCard2" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard2')"></div>
+                <div class="card"><input type="text" id="invCard3Name" class="card-title" placeholder="Objet 3"><img id="imgInvCard3" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard3')"></div>
+                <div class="card"><input type="text" id="invCard4Name" class="card-title" placeholder="Objet 4"><img id="imgInvCard4" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard4')"></div>
+                <div class="card"><input type="text" id="invCard5Name" class="card-title" placeholder="Objet 5"><img id="imgInvCard5" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard5')"></div>
+            </div>
+        </div>
+    </details>
+
+    <!-- SAC & Notes -->
     <div class="section-panel">
         <h3 style="text-align: left; margin-top: 0;">🎒 Sac & Notes</h3>
         <div class="grid-auto">
@@ -380,7 +396,7 @@
         </div>
     </div>
 
-    <!-- NOUVEAU BLOC : MONTÉE DE NIVEAU (Dépliable) -->
+    <!-- MONTÉE DE NIVEAU (Dépliable) -->
     <details class="section-panel">
         <summary style="cursor: pointer; font-size: 1.2em; font-weight: bold; color: var(--primary-gold); outline: none;">
             📈 Montée de Niveau
@@ -609,6 +625,9 @@
         "card1Name", "card2Name", "card3Name", "card4Name", "card5Name", 
         "invSlots", "invGold", "adventureNotes", "activeAnimalForm", "seraphinTrait",
         
+        // Nouveaux champs pour l'inventaire des cartes
+        "invCard1Name", "invCard2Name", "invCard3Name", "invCard4Name", "invCard5Name",
+        
         // Cases à cocher Palier 2
         "lvl2_cb_trait1", "lvl2_cb_trait2", "lvl2_cb_trait3", "lvl2_cb_hp1", "lvl2_cb_hp2", "lvl2_cb_str1", "lvl2_cb_str2", "lvl2_cb_exp1", "lvl2_cb_exp2", "lvl2_cb_dom1", "lvl2_cb_esq1",
         "lvl2_trait_agi", "lvl2_trait_fin", "lvl2_trait_ins", "lvl2_trait_pre", "lvl2_trait_kno", "lvl2_trait_str",
@@ -622,7 +641,12 @@
         "lvl4_trait_agi", "lvl4_trait_fin", "lvl4_trait_ins", "lvl4_trait_pre", "lvl4_trait_kno", "lvl4_trait_str"
     ];
     
-    const imageIds = ["imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", "imgWpn1", "imgWpn2", "imgArmor", "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5"];
+    const imageIds = [
+        "imgPortrait", "imgClass", "imgAncestry", "imgCommunity", "imgOrigin", 
+        "imgWpn1", "imgWpn2", "imgArmor", 
+        "imgCard1", "imgCard2", "imgCard3", "imgCard4", "imgCard5",
+        "imgInvCard1", "imgInvCard2", "imgInvCard3", "imgInvCard4", "imgInvCard5"
+    ];
 
     function exportCharacter() {
         saveCurrentForm();
