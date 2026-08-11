@@ -156,6 +156,15 @@
         .gauge-compact button {
             padding: 2px 8px; margin: 0 2px; font-size: 0.8em; cursor: pointer;
         }
+
+        /* Message de confirmation de copie */
+        #copyToast {
+            visibility: hidden; min-width: 250px; background-color: var(--primary-gold); color: #000; 
+            text-align: center; border-radius: 4px; padding: 12px; position: fixed; 
+            z-index: 1000; left: 50%; bottom: 30px; font-size: 1em; font-weight: bold; 
+            transform: translateX(-50%); box-shadow: 0 4px 8px rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.3s;
+        }
+        #copyToast.show { visibility: visible; opacity: 1; }
     </style>
 </head>
 <body>
@@ -179,7 +188,8 @@
                 <option value="theme-Seraphin">Séraphin</option>
                 <option value="theme-Sorcier">Sorcier</option>
             </select>
-            <button onclick="exportCharacter()">⬇️ Exporter</button>
+            <button onclick="exportCharacter()">⬇️ Exporter JSON</button>
+            <button onclick="copyForGoogleDocs()">📋 Copier pour Google Docs</button>
             <label for="importFile" class="btn-file" style="margin: 0;">⬆️ Importer</label>
             <input type="file" id="importFile" accept=".json" onchange="importCharacter(event)" style="display: none;">
         </div>
@@ -187,17 +197,17 @@
 
     <!-- PORTRAIT ET IDENTITÉ GRAND FORMAT -->
     <div class="grid-auto">
-		 <div class="section-panel" style="text-align: center; display: flex; flex-direction: column; justify-content: center; max-width: 150px; margin: 0 auto 10px auto;">
+         <div class="section-panel" style="text-align: center; display: flex; flex-direction: column; justify-content: center; max-width: 150px; margin: 0 auto 10px auto;">
             <img id="imgPortrait" class="portrait-img" src="">
             <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgPortrait')">
         </div>
-		<div class="section-panel" style="grid-column: span 2; display: flex; align-items: center;">
+        <div class="section-panel" style="grid-column: span 2; display: flex; align-items: center;">
             <div style="display: grid; grid-template-columns: 3fr 1fr; width: 100%; gap: 15px;">
                 <div>
                     <label class="label-large">Nom du Personnage</label>
                     <input type="text" id="charName" class="identity-large" style="margin-bottom: 10px;">
                     
-                    <label class="label-large">Pronons</label>
+                    <label class="label-large">Pronoms</label>
                     <input type="text" id="charPronouns" class="identity-large">
                 </div>
                 <div>
@@ -235,7 +245,7 @@
                     <button onclick="modifyValue('statStr', 1)">+</button>
                 </div>
             </div>
-			<div class="stat-box">
+            <div class="stat-box">
                 <label>Finesse</label>
                 <div class="gauge-compact">
                     <button onclick="modifyValue('statFin', -1)">-</button>
@@ -309,24 +319,24 @@
                 <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
                     <label for="activeAnimalForm" style="margin:0; white-space: nowrap;">Forme Active :</label>
                     <select id="activeAnimalForm" style="flex-grow: 1;" onchange="updateSelectedFormTitle()">
-						<option value="none">Aucune</option>
-						<optgroup label="Palier 1 (T1)">
-							<option value="form1">T1 - Ami Domestique</option>
-							<option value="form2">T1 - Brouteur Agile</option>
-							<option value="form3">T1 - Eclaireur Agile</option>
-							<option value="form4">T1 - Eclaireur Aquatique</option>
-							<option value="form5">T1 - Prédateur de Meute</option>
-							<option value="form6">T1 - Traqueur Arachnide</option>
-						</optgroup>
-						<optgroup label="Palier 2 (T2)">
-							<option value="form7">T2 - Sentinelle Blindée</option>
-							<option value="form8">T2 - Grand Marcheur</option>
-							<option value="form9">T2 - Prédateur Bondissant</option>
-							<option value="form10">T2 - Bête Ailée</option>
-							<option value="form11">T2 - Bête Puissante</option>
-							<option value="form12">T2 - Serpent Frappeur</option>
-						</optgroup>
-					</select>
+                        <option value="none">Aucune</option>
+                        <optgroup label="Palier 1 (T1)">
+                            <option value="form1">T1 - Ami Domestique</option>
+                            <option value="form2">T1 - Brouteur Agile</option>
+                            <option value="form3">T1 - Eclaireur Agile</option>
+                            <option value="form4">T1 - Eclaireur Aquatique</option>
+                            <option value="form5">T1 - Prédateur de Meute</option>
+                            <option value="form6">T1 - Traqueur Arachnide</option>
+                        </optgroup>
+                        <optgroup label="Palier 2 (T2)">
+                            <option value="form7">T2 - Sentinelle Blindée</option>
+                            <option value="form8">T2 - Grand Marcheur</option>
+                            <option value="form9">T2 - Prédateur Bondissant</option>
+                            <option value="form10">T2 - Bête Ailée</option>
+                            <option value="form11">T2 - Bête Puissante</option>
+                            <option value="form12">T2 - Serpent Frappeur</option>
+                        </optgroup>
+                    </select>
                 </div>
                 <div id="animalFormsContainer" style="display:none; border-top: 1px solid var(--primary-gold); padding-top:10px;">
                     <input type="text" id="activeFormName" class="card-title" placeholder="Nom de la forme" oninput="saveCurrentForm()">
@@ -504,6 +514,8 @@
         </div>
     </details>
 
+    <div id="copyToast">Texte copié ! Ouvrez un document vide et faites Ctrl+V</div>
+
 </div>
 
 <script>
@@ -553,13 +565,10 @@
     // --- GESTION DRUIDE ---
 	  function saveCurrentForm() {
 		const activeId = document.getElementById('activeAnimalForm').value;
-		// On vérifie que activeId n'est pas "none" ET que la forme existe bien dans formsData
 		if (activeId !== "none") {
-			// Initialisation défensive au cas où la clé serait absente
 			if (!formsData[activeId]) {
 				formsData[activeId] = { name: "", img: "" };
 			}
-			
 			const nameInput = document.getElementById('activeFormName');
 			const imgInput = document.getElementById('imgActiveForm');
 			
@@ -613,7 +622,7 @@
         });
     }
 
-    // --- EXPORT / IMPORT ---
+    // --- EXPORT / IMPORT JSON ---
     const textFields = [
         "themeSelect", "charName", "charPronouns", "charLevel", "charCompetence",
         "statAgi", "statFin", "statIns", "statPre", "statKno", "statStr", 
@@ -624,19 +633,11 @@
         "wpn1Name", "wpn2Name", "armorName", 
         "card1Name", "card2Name", "card3Name", "card4Name", "card5Name", 
         "invSlots", "invGold", "adventureNotes", "activeAnimalForm", "seraphinTrait",
-        
-        // Nouveaux champs pour l'inventaire des cartes
         "invCard1Name", "invCard2Name", "invCard3Name", "invCard4Name", "invCard5Name",
-        
-        // Cases à cocher Palier 2
         "lvl2_cb_trait1", "lvl2_cb_trait2", "lvl2_cb_trait3", "lvl2_cb_hp1", "lvl2_cb_hp2", "lvl2_cb_str1", "lvl2_cb_str2", "lvl2_cb_exp1", "lvl2_cb_exp2", "lvl2_cb_dom1", "lvl2_cb_esq1",
         "lvl2_trait_agi", "lvl2_trait_fin", "lvl2_trait_ins", "lvl2_trait_pre", "lvl2_trait_kno", "lvl2_trait_str",
-        
-        // Cases à cocher Palier 3
         "lvl3_cb_trait1", "lvl3_cb_trait2", "lvl3_cb_trait3", "lvl3_cb_hp1", "lvl3_cb_hp2", "lvl3_cb_str1", "lvl3_cb_str2", "lvl3_cb_exp1", "lvl3_cb_dom1", "lvl3_cb_esq1", "lvl3_cb_sub1", "lvl3_cb_comp1", "lvl3_cb_comp2", "lvl3_cb_multi1", "lvl3_cb_multi2",
         "lvl3_trait_agi", "lvl3_trait_fin", "lvl3_trait_ins", "lvl3_trait_pre", "lvl3_trait_kno", "lvl3_trait_str",
-        
-        // Cases à cocher Palier 4
         "lvl4_cb_trait1", "lvl4_cb_trait2", "lvl4_cb_trait3", "lvl4_cb_hp1", "lvl4_cb_hp2", "lvl4_cb_str1", "lvl4_cb_str2", "lvl4_cb_exp1", "lvl4_cb_dom1", "lvl4_cb_esq1", "lvl4_cb_sub1", "lvl4_cb_comp1", "lvl4_cb_comp2", "lvl4_cb_multi1", "lvl4_cb_multi2",
         "lvl4_trait_agi", "lvl4_trait_fin", "lvl4_trait_ins", "lvl4_trait_pre", "lvl4_trait_kno", "lvl4_trait_str"
     ];
@@ -671,6 +672,111 @@
         a.href = url;
         a.download = (document.getElementById("charName").value || "Perso") + ".json";
         a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // --- COPIER POUR GOOGLE DOCS (Version Compacte & Blanche + Expériences) ---
+    function copyForGoogleDocs() {
+        const name = document.getElementById("charName").value || "Personnage";
+        const sacText = document.getElementById("invSlots").value.replace(/\n/g, '<br>');
+        const notesText = document.getElementById("adventureNotes").value.replace(/\n/g, '<br>');
+
+        const htmlContent = `
+            <div style="background-color: #ffffff; color: #000000; font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.3;">
+                <h2 style="margin-top: 0; margin-bottom: 4px; color: #000000; border-bottom: 1px solid #ccc; padding-bottom: 2px; font-size: 14pt;">${name}</h2>
+                <p style="margin-top: 0; margin-bottom: 12px;">
+                    <strong>Pronoms :</strong> ${document.getElementById("charPronouns").value} | 
+                    <strong>Niveau :</strong> ${document.getElementById("charLevel").value} | 
+                    <strong>Compétence :</strong> ${document.getElementById("charCompetence").value}
+                </p>
+
+                <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Caractéristiques</h3>
+                <p style="margin-top: 0; margin-bottom: 12px;">
+                    <strong>Agi :</strong> ${document.getElementById("statAgi").value} | 
+                    <strong>For :</strong> ${document.getElementById("statStr").value} | 
+                    <strong>Fin :</strong> ${document.getElementById("statFin").value} | 
+                    <strong>Ins :</strong> ${document.getElementById("statIns").value} | 
+                    <strong>Pré :</strong> ${document.getElementById("statPre").value} | 
+                    <strong>Sav :</strong> ${document.getElementById("statKno").value}
+                </p>
+
+                <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Jauges & Défense</h3>
+                <p style="margin-top: 0; margin-bottom: 12px;">
+                    <strong>HP :</strong> ${document.getElementById("valHPCurr").value} / ${document.getElementById("valHPMax").value} | 
+                    <strong>Stress :</strong> ${document.getElementById("valStressCurr").value} / ${document.getElementById("valStressMax").value} | 
+                    <strong>Espoir :</strong> ${document.getElementById("valHopeCurr").value} / ${document.getElementById("valHopeMax").value} <br>
+                    <strong>Esquive :</strong> ${document.getElementById("valEvasion").value} | 
+                    <strong>Armure :</strong> ${document.getElementById("valArmorCurr").value} / ${document.getElementById("valArmorMax").value} | 
+                    <strong>Seuils :</strong> ${document.getElementById("valThresholds").value}
+                </p>
+
+                <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Expériences</h3>
+                <p style="margin-top: 0; margin-bottom: 12px;">
+                    <strong>Expérience 1 :</strong> ${document.getElementById("exp1Name").value} (+${document.getElementById("exp1Val").value}) | 
+                    <strong>Expérience 2 :</strong> ${document.getElementById("exp2Name").value} (+${document.getElementById("exp2Val").value}) | 
+                    <strong>Expérience 3 :</strong> ${document.getElementById("exp3Name").value} (+${document.getElementById("exp3Val").value})
+                </p>
+
+                <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Fondations</h3>
+                <p style="margin-top: 0; margin-bottom: 12px;">
+                    <strong>Classe :</strong> ${document.getElementById("classCardName").value} | 
+                    <strong>Ascendance :</strong> ${document.getElementById("ancestryCardName").value} | 
+                    <strong>Communauté :</strong> ${document.getElementById("communityCardName").value} | 
+                    <strong>Origine :</strong> ${document.getElementById("originCardName").value}
+                </p>
+
+                <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Équipement Actif</h3>
+                <p style="margin-top: 0; margin-bottom: 12px;">
+                    <strong>Arme 1 :</strong> ${document.getElementById("wpn1Name").value} | 
+                    <strong>Arme 2 :</strong> ${document.getElementById("wpn2Name").value} | 
+                    <strong>Armure :</strong> ${document.getElementById("armorName").value}
+                </p>
+
+                <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Domaines & Inventaire (Cartes)</h3>
+                <p style="margin-top: 0; margin-bottom: 12px;">
+                    <strong>Capacités :</strong> ${document.getElementById("card1Name").value} | ${document.getElementById("card2Name").value} | ${document.getElementById("card3Name").value} | ${document.getElementById("card4Name").value} | ${document.getElementById("card5Name").value}<br>
+                    <strong>Objets :</strong> ${document.getElementById("invCard1Name").value} | ${document.getElementById("invCard2Name").value} | ${document.getElementById("invCard3Name").value} | ${document.getElementById("invCard4Name").value} | ${document.getElementById("invCard5Name").value}
+                </p>
+
+                <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Sac, Or & Notes</h3>
+                <p style="margin-top: 0; margin-bottom: 12px;">
+                    <strong>Or :</strong> ${document.getElementById("invGold").value}<br>
+                    <strong>Sac :</strong> ${sacText}<br>
+                    <strong>Notes :</strong> ${notesText}
+                </p>
+            </div>
+        `;
+
+        // Créer un élément invisible
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = htmlContent;
+        tempDiv.style.position = "absolute";
+        tempDiv.style.left = "-9999px";
+        document.body.appendChild(tempDiv);
+
+        // Sélectionner et copier
+        const range = document.createRange();
+        range.selectNodeContents(tempDiv);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        try {
+            document.execCommand('copy');
+            showToast();
+        } catch (err) {
+            alert("Erreur lors de la copie.");
+        }
+
+        // Nettoyer
+        selection.removeAllRanges();
+        document.body.removeChild(tempDiv);
+    }
+
+    function showToast() {
+        const toast = document.getElementById("copyToast");
+        toast.className = "show";
+        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
     }
 
     function importCharacter(event) {
