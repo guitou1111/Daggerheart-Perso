@@ -307,6 +307,64 @@
     </div>
     </div>
 
+    <!-- ÉTATS & CONDITIONS -->
+    <div class="section-panel">
+        <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">🎭 États & Conditions</h3>
+        <div class="grid-cards">
+            <!-- Slot 1 -->
+            <div class="card" style="justify-content: flex-start;">
+                <select id="activeState1" style="margin-bottom: 8px;" onchange="updateSelectedState(1)">
+                    <option value="none">-- Aucun État --</option>
+                    <option value="cache">Caché (Hidden)</option>
+                    <option value="vulnerable">Vulnérable (Vulnerable)</option>
+                    <option value="empoisonne">Empoisonné (Poisoned)</option>
+                    <option value="entrave">Entravé (Restrained)</option>
+                    <option value="effraye">Effrayé (Frightened)</option>
+                    <option value="personnalise">Personnalisé...</option>
+                </select>
+                <div id="stateContainer1" style="display:none; flex-direction: column; flex-grow: 1;">
+                    <input type="text" id="stateName1" class="card-title" placeholder="Nom de l'état" oninput="saveCurrentState(1)">
+                    <img id="imgState1" class="card-img-preview" src="">
+                    <input type="file" accept="image/*" class="file-input" onchange="loadImageState(event, 1)">
+                </div>
+            </div>
+            <!-- Slot 2 -->
+            <div class="card" style="justify-content: flex-start;">
+                <select id="activeState2" style="margin-bottom: 8px;" onchange="updateSelectedState(2)">
+                    <option value="none">-- Aucun État --</option>
+                    <option value="cache">Caché (Hidden)</option>
+                    <option value="vulnerable">Vulnérable (Vulnerable)</option>
+                    <option value="empoisonne">Empoisonné (Poisoned)</option>
+                    <option value="entrave">Entravé (Restrained)</option>
+                    <option value="effraye">Effrayé (Frightened)</option>
+                    <option value="personnalise">Personnalisé...</option>
+                </select>
+                <div id="stateContainer2" style="display:none; flex-direction: column; flex-grow: 1;">
+                    <input type="text" id="stateName2" class="card-title" placeholder="Nom de l'état" oninput="saveCurrentState(2)">
+                    <img id="imgState2" class="card-img-preview" src="">
+                    <input type="file" accept="image/*" class="file-input" onchange="loadImageState(event, 2)">
+                </div>
+            </div>
+            <!-- Slot 3 -->
+            <div class="card" style="justify-content: flex-start;">
+                <select id="activeState3" style="margin-bottom: 8px;" onchange="updateSelectedState(3)">
+                    <option value="none">-- Aucun État --</option>
+                    <option value="cache">Caché (Hidden)</option>
+                    <option value="vulnerable">Vulnérable (Vulnerable)</option>
+                    <option value="empoisonne">Empoisonné (Poisoned)</option>
+                    <option value="entrave">Entravé (Restrained)</option>
+                    <option value="effraye">Effrayé (Frightened)</option>
+                    <option value="personnalise">Personnalisé...</option>
+                </select>
+                <div id="stateContainer3" style="display:none; flex-direction: column; flex-grow: 1;">
+                    <input type="text" id="stateName3" class="card-title" placeholder="Nom de l'état" oninput="saveCurrentState(3)">
+                    <img id="imgState3" class="card-img-preview" src="">
+                    <input type="file" accept="image/*" class="file-input" onchange="loadImageState(event, 3)">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- EXPÉRIENCES -->
     <div class="section-panel">
         <h3 style="text-align: left; margin-top: 0; margin-bottom: 8px;">Expériences</h3>
@@ -586,6 +644,17 @@
 		form11: { name: "Bête Puissante", img: "" }, 
 		form12: { name: "Serpent Frappeur", img: "" }
 	};
+    
+    // NOUVEAU: Données des États (Conditions)
+    let statesData = {
+        cache: { name: "Caché", img: "" },
+        vulnerable: { name: "Vulnérable", img: "" },
+        empoisonne: { name: "Empoisonné", img: "" },
+        entrave: { name: "Entravé", img: "" },
+        effraye: { name: "Effrayé", img: "" },
+        personnalise: { name: "État Personnalisé", img: "" }
+    };
+
     let prayerDiceData = [];
 
     // --- GESTION DU THÈME ---
@@ -616,31 +685,64 @@
 
     // --- SUPPRESSION DE CARTE (Nom + Image) ---
     function clearCard(btnElement, textInputId, imageId) {
-        // Vider le champ texte
         document.getElementById(textInputId).value = '';
-        
-        // Cacher et vider l'image
         const img = document.getElementById(imageId);
         img.src = '';
         img.style.display = 'none';
-
-        // Réinitialiser le champ "file" pour pouvoir sélectionner la même image à nouveau
         const fileInput = btnElement.parentElement.querySelector('.file-input');
-        if (fileInput) {
-            fileInput.value = '';
+        if (fileInput) { fileInput.value = ''; }
+    }
+
+    // --- GESTION ÉTATS & CONDITIONS ---
+    function saveCurrentState(slotId) {
+        const activeId = document.getElementById('activeState' + slotId).value;
+        if (activeId !== "none") {
+            if (!statesData[activeId]) { statesData[activeId] = { name: "", img: "" }; }
+            const nameInput = document.getElementById('stateName' + slotId);
+            const imgInput = document.getElementById('imgState' + slotId);
+            if (nameInput) statesData[activeId].name = nameInput.value;
+            if (imgInput) statesData[activeId].img = imgInput.src;
+        }
+    }
+
+    function updateSelectedState(slotId) {
+        const select = document.getElementById('activeState' + slotId);
+        const container = document.getElementById('stateContainer' + slotId);
+        const stateId = select.value;
+        
+        if (stateId === "none") {
+            container.style.display = 'none';
+        } else {
+            container.style.display = 'flex';
+            if (!statesData[stateId]) statesData[stateId] = { name: "", img: "" };
+            document.getElementById('stateName' + slotId).value = statesData[stateId].name || "";
+            const img = document.getElementById('imgState' + slotId);
+            img.src = statesData[stateId].img || "";
+            img.style.display = statesData[stateId].img ? 'block' : 'none';
+        }
+    }
+
+    function loadImageState(event, slotId) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgTag = document.getElementById('imgState' + slotId);
+                imgTag.src = e.target.result;
+                imgTag.style.display = 'block';
+                saveCurrentState(slotId);
+            }
+            reader.readAsDataURL(file);
         }
     }
 
     // --- GESTION DRUIDE ---
-	  function saveCurrentForm() {
+	function saveCurrentForm() {
 		const activeId = document.getElementById('activeAnimalForm').value;
 		if (activeId !== "none") {
-			if (!formsData[activeId]) {
-				formsData[activeId] = { name: "", img: "" };
-			}
+			if (!formsData[activeId]) { formsData[activeId] = { name: "", img: "" }; }
 			const nameInput = document.getElementById('activeFormName');
 			const imgInput = document.getElementById('imgActiveForm');
-			
 			if (nameInput) formsData[activeId].name = nameInput.value;
 			if (imgInput) formsData[activeId].img = imgInput.src;
 		}
@@ -702,6 +804,7 @@
         "wpn1Name", "wpn2Name", "armorName", 
         "card1Name", "card2Name", "card3Name", "card4Name", "card5Name", 
         "invSlots", "invGold", "adventureNotes", "activeAnimalForm", "seraphinTrait",
+        "activeState1", "activeState2", "activeState3", // Ajout des états
         "invCard1Name", "invCard2Name", "invCard3Name", "invCard4Name", "invCard5Name",
         "lvl2_cb_trait1", "lvl2_cb_trait2", "lvl2_cb_trait3", "lvl2_cb_hp1", "lvl2_cb_hp2", "lvl2_cb_str1", "lvl2_cb_str2", "lvl2_cb_exp1", "lvl2_cb_exp2", "lvl2_cb_dom1", "lvl2_cb_esq1",
         "lvl2_trait_agi", "lvl2_trait_fin", "lvl2_trait_ins", "lvl2_trait_pre", "lvl2_trait_kno", "lvl2_trait_str",
@@ -720,6 +823,7 @@
 
     function exportCharacter() {
         saveCurrentForm();
+        saveCurrentState(1); saveCurrentState(2); saveCurrentState(3);
         const data = {};
         
         textFields.forEach(id => { 
@@ -733,6 +837,7 @@
         });
         
         data.formsData = formsData;
+        data.statesData = statesData;
         data.prayerDiceData = prayerDiceData;
 
         const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
@@ -744,11 +849,21 @@
         URL.revokeObjectURL(url);
     }
 
-    // --- COPIER POUR GOOGLE DOCS (Version Compacte & Blanche + Expériences) ---
+    // --- COPIER POUR GOOGLE DOCS ---
     function copyForGoogleDocs() {
         const name = document.getElementById("charName").value || "Personnage";
         const sacText = document.getElementById("invSlots").value.replace(/\n/g, '<br>');
         const notesText = document.getElementById("adventureNotes").value.replace(/\n/g, '<br>');
+
+        // Récupération des états actifs
+        let activeStatesArr = [];
+        for (let i = 1; i <= 3; i++) {
+            let val = document.getElementById('activeState' + i).value;
+            if (val !== 'none' && statesData[val]) {
+                activeStatesArr.push(statesData[val].name || val);
+            }
+        }
+        let activeStatesText = activeStatesArr.length > 0 ? activeStatesArr.join(' | ') : "Aucun";
 
         const htmlContent = `
             <div style="background-color: #ffffff; color: #000000; font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.3;">
@@ -769,14 +884,15 @@
                     <strong>Sav :</strong> ${document.getElementById("statKno").value}
                 </p>
 
-                <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Jauges & Défense</h3>
+                <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Jauges, Défense & États</h3>
                 <p style="margin-top: 0; margin-bottom: 12px;">
                     <strong>HP :</strong> ${document.getElementById("valHPCurr").value} / ${document.getElementById("valHPMax").value} | 
                     <strong>Stress :</strong> ${document.getElementById("valStressCurr").value} / ${document.getElementById("valStressMax").value} | 
                     <strong>Espoir :</strong> ${document.getElementById("valHopeCurr").value} / ${document.getElementById("valHopeMax").value} <br>
                     <strong>Esquive :</strong> ${document.getElementById("valEvasion").value} | 
                     <strong>Armure :</strong> ${document.getElementById("valArmorCurr").value} / ${document.getElementById("valArmorMax").value} | 
-                    <strong>Seuils :</strong> ${document.getElementById("valThresholds").value}
+                    <strong>Seuils :</strong> ${document.getElementById("valThresholds").value} <br>
+                    <strong>🎭 États subis :</strong> ${activeStatesText}
                 </p>
 
                 <h3 style="margin-bottom: 2px; font-size: 11pt; color: #000000; font-weight: bold; text-decoration: underline;">Expériences</h3>
@@ -816,14 +932,12 @@
             </div>
         `;
 
-        // Créer un élément invisible
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = htmlContent;
         tempDiv.style.position = "absolute";
         tempDiv.style.left = "-9999px";
         document.body.appendChild(tempDiv);
 
-        // Sélectionner et copier
         const range = document.createRange();
         range.selectNodeContents(tempDiv);
         const selection = window.getSelection();
@@ -837,7 +951,6 @@
             alert("Erreur lors de la copie.");
         }
 
-        // Nettoyer
         selection.removeAllRanges();
         document.body.removeChild(tempDiv);
     }
@@ -858,6 +971,7 @@
                 const data = JSON.parse(e.target.result);
                 
                 formsData = data.formsData || formsData;
+                statesData = data.statesData || statesData;
                 prayerDiceData = data.prayerDiceData || [];
                 
                 textFields.forEach(id => { 
@@ -875,6 +989,7 @@
                 
                 changeTheme();
                 updateSelectedFormTitle();
+                updateSelectedState(1); updateSelectedState(2); updateSelectedState(3);
                 renderPrayerDice();
                 
             } catch(err) {
@@ -887,6 +1002,7 @@
     window.onload = function() {
         changeTheme();
         renderPrayerDice();
+        updateSelectedState(1); updateSelectedState(2); updateSelectedState(3);
     };
 </script>
 
