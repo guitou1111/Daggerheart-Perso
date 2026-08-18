@@ -105,10 +105,22 @@
         .gauge-separator { font-size: 1.1em; font-weight: bold; color: var(--primary-gold); padding: 0 2px; }
 
         /* Cartes Image */
-        .card { background: linear-gradient(145deg, var(--bg-panel), var(--bg-dark)); border: 1px solid var(--primary-gold); border-radius: 8px; padding: 10px; text-align: center; display: flex; flex-direction: column; }
+        .card { position: relative; background: linear-gradient(145deg, var(--bg-panel), var(--bg-dark)); border: 1px solid var(--primary-gold); border-radius: 8px; padding: 10px; text-align: center; display: flex; flex-direction: column; }
         .card-title { font-weight: bold; font-size: 1em; background: transparent; border: none; border-bottom: 1px dashed var(--primary-gold); color: var(--primary-gold); text-align: center; margin-bottom: 8px; padding: 2px; }
         .card-img-preview { width: 100%; aspect-ratio: 5 / 7; object-fit: contain; background-color: #111; border-radius: 6px; border: 1px solid var(--border-color); display: none; margin-bottom: 5px; }
         .file-input { font-size: 0.75em; color: var(--text-light); width: 100%; margin-top: auto; }
+
+        /* Bouton de suppression de carte */
+        .btn-delete-card {
+            position: absolute; top: 5px; right: 5px;
+            background-color: rgba(230, 57, 70, 0.8); color: white;
+            border: none; border-radius: 4px; padding: 4px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 0.9em; transition: 0.2s; z-index: 10;
+        }
+        .btn-delete-card:hover {
+            background-color: rgba(230, 57, 70, 1); transform: scale(1.1);
+        }
 
         .portrait-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-gold); display: none; margin: 0 auto 5px auto; }
 
@@ -291,7 +303,7 @@
     <div class="grid-3-strict" style="margin-bottom: 0;">
         <div class="stat-box"><label>🏃 Esquive</label><div><button onclick="modifyValue('valEvasion', -1)">-</button><input type="number" id="valEvasion" value="8"><button onclick="modifyValue('valEvasion', 1)">+</button></div></div>
         <div class="stat-box"><label>🛡️ Armure</label><div class="gauge-compact"><button onclick="modifyValue('valArmorCurr', -1)">-</button><input type="number" id="valArmorCurr" value="0"><button onclick="modifyValue('valArmorCurr', 1)">+</button><span class="gauge-separator">/</span><input type="number" id="valArmorMax" value="3"></div></div>
-        <div class="stat-box"><label>⚖️ Seuils</label><input type="text" id="valThresholds" placeholder="5/10/15"></div>
+        <div class="stat-box"><label>⚖️ Seuils</label><input type="text" id="valThresholds" placeholder="10/15"></div>
     </div>
     </div>
 
@@ -363,9 +375,24 @@
     <div class="section-panel">
         <h3>Équipement Actif</h3>
         <div class="grid-cards">
-            <div class="card"><input type="text" id="wpn1Name" class="card-title" placeholder="Arme Principale"><img id="imgWpn1" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgWpn1')"></div>
-            <div class="card"><input type="text" id="wpn2Name" class="card-title" placeholder="Arme Secondaire"><img id="imgWpn2" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgWpn2')"></div>
-            <div class="card"><input type="text" id="armorName" class="card-title" placeholder="Armure"><img id="imgArmor" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgArmor')"></div>
+            <div class="card">
+                <button class="btn-delete-card" onclick="clearCard(this, 'wpn1Name', 'imgWpn1')" title="Effacer">🗑️</button>
+                <input type="text" id="wpn1Name" class="card-title" placeholder="Arme Principale">
+                <img id="imgWpn1" class="card-img-preview" src="">
+                <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgWpn1')">
+            </div>
+            <div class="card">
+                <button class="btn-delete-card" onclick="clearCard(this, 'wpn2Name', 'imgWpn2')" title="Effacer">🗑️</button>
+                <input type="text" id="wpn2Name" class="card-title" placeholder="Arme Secondaire">
+                <img id="imgWpn2" class="card-img-preview" src="">
+                <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgWpn2')">
+            </div>
+            <div class="card">
+                <button class="btn-delete-card" onclick="clearCard(this, 'armorName', 'imgArmor')" title="Effacer">🗑️</button>
+                <input type="text" id="armorName" class="card-title" placeholder="Armure">
+                <img id="imgArmor" class="card-img-preview" src="">
+                <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgArmor')">
+            </div>
         </div>
     </div>
 
@@ -388,11 +415,36 @@
         </summary>
         <div style="margin-top: 15px;">
             <div class="grid-cards">
-                <div class="card"><input type="text" id="invCard1Name" class="card-title" placeholder="Objet 1"><img id="imgInvCard1" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard1')"></div>
-                <div class="card"><input type="text" id="invCard2Name" class="card-title" placeholder="Objet 2"><img id="imgInvCard2" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard2')"></div>
-                <div class="card"><input type="text" id="invCard3Name" class="card-title" placeholder="Objet 3"><img id="imgInvCard3" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard3')"></div>
-                <div class="card"><input type="text" id="invCard4Name" class="card-title" placeholder="Objet 4"><img id="imgInvCard4" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard4')"></div>
-                <div class="card"><input type="text" id="invCard5Name" class="card-title" placeholder="Objet 5"><img id="imgInvCard5" class="card-img-preview" src=""><input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard5')"></div>
+                <div class="card">
+                    <button class="btn-delete-card" onclick="clearCard(this, 'invCard1Name', 'imgInvCard1')" title="Effacer">🗑️</button>
+                    <input type="text" id="invCard1Name" class="card-title" placeholder="Objet 1">
+                    <img id="imgInvCard1" class="card-img-preview" src="">
+                    <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard1')">
+                </div>
+                <div class="card">
+                    <button class="btn-delete-card" onclick="clearCard(this, 'invCard2Name', 'imgInvCard2')" title="Effacer">🗑️</button>
+                    <input type="text" id="invCard2Name" class="card-title" placeholder="Objet 2">
+                    <img id="imgInvCard2" class="card-img-preview" src="">
+                    <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard2')">
+                </div>
+                <div class="card">
+                    <button class="btn-delete-card" onclick="clearCard(this, 'invCard3Name', 'imgInvCard3')" title="Effacer">🗑️</button>
+                    <input type="text" id="invCard3Name" class="card-title" placeholder="Objet 3">
+                    <img id="imgInvCard3" class="card-img-preview" src="">
+                    <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard3')">
+                </div>
+                <div class="card">
+                    <button class="btn-delete-card" onclick="clearCard(this, 'invCard4Name', 'imgInvCard4')" title="Effacer">🗑️</button>
+                    <input type="text" id="invCard4Name" class="card-title" placeholder="Objet 4">
+                    <img id="imgInvCard4" class="card-img-preview" src="">
+                    <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard4')">
+                </div>
+                <div class="card">
+                    <button class="btn-delete-card" onclick="clearCard(this, 'invCard5Name', 'imgInvCard5')" title="Effacer">🗑️</button>
+                    <input type="text" id="invCard5Name" class="card-title" placeholder="Objet 5">
+                    <img id="imgInvCard5" class="card-img-preview" src="">
+                    <input type="file" accept="image/*" class="file-input" onchange="loadImage(event, 'imgInvCard5')">
+                </div>
             </div>
         </div>
     </details>
@@ -559,6 +611,23 @@
                 saveCurrentForm();
             }
             reader.readAsDataURL(file);
+        }
+    }
+
+    // --- SUPPRESSION DE CARTE (Nom + Image) ---
+    function clearCard(btnElement, textInputId, imageId) {
+        // Vider le champ texte
+        document.getElementById(textInputId).value = '';
+        
+        // Cacher et vider l'image
+        const img = document.getElementById(imageId);
+        img.src = '';
+        img.style.display = 'none';
+
+        // Réinitialiser le champ "file" pour pouvoir sélectionner la même image à nouveau
+        const fileInput = btnElement.parentElement.querySelector('.file-input');
+        if (fileInput) {
+            fileInput.value = '';
         }
     }
 
